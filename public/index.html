@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KonserKu - Python OOP + Netlify</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: #0f172a; 
+            color: white; 
+            padding: 20px; 
+            max-width: 900px; 
+            margin: auto; 
+        }
+        h1 { 
+            color: #8b5cf6; 
+            text-align: center; 
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        h2 { 
+            color: #38bdf8; 
+            margin: 30px 0 15px 0;
+            font-size: 1.8em;
+        }
+        .card { 
+            background: #1e293b; 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 12px; 
+            border: 1px solid #334155;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: #8b5cf6;
+        }
+        .card h3 { 
+            margin-bottom: 10px; 
+            color: #fbbf24;
+            font-size: 1.4em;
+        }
+        .card p {
+            margin: 8px 0;
+            color: #cbd5e1;
+        }
+        .price {
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        button { 
+            background: #8b5cf6; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold;
+            font-size: 1em;
+            transition: background 0.2s;
+        }
+        button:hover { 
+            background: #7c3aed; 
+        }
+        button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+        input, select { 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #475569; 
+            background: #0f172a; 
+            color: white; 
+            font-size: 1em;
+            margin-right: 10px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #8b5cf6;
+        }
+        .ticket { 
+            background: linear-gradient(135deg, #064e3b, #065f46); 
+            padding: 20px; 
+            border-left: 5px solid #10b981; 
+            margin-top: 20px; 
+            border-radius: 12px;
+            animation: slideIn 0.5s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ticket h3 {
+            color: #10b981;
+            margin-bottom: 15px;
+        }
+        .loading { 
+            text-align: center; 
+            color: #94a3b8; 
+            padding: 40px;
+            font-size: 1.2em;
+        }
+        .error {
+            background: #7f1d1d;
+            color: #fca5a5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .form-container {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+        .form-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .form-row input, .form-row select {
+            flex: 1;
+            min-width: 200px;
+        }
+        .badge {
+            display: inline-block;
+            background: #8b5cf6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 KonserKu (Python OOP + Netlify)</h1>
+    
+    <h2>🎤 Daftar Konser</h2>
+    <div id="event-list" class="loading">⏳ Memuat data dari Python...</div>
+
+    <h2>️ Form Pemesanan</h2>
+    <div class="form-container">
+        <div class="form-row">
+            <input type="text" id="nama-input" placeholder="Masukkan Nama Anda" required>
+            <select id="event-select">
+                <option value="">-- Pilih Konser --</option>
+            </select>
+        </div>
+        <button onclick="pesanTiket()" id="btn-pesan">Beli Tiket</button>
+    </div>
+
+    <div id="hasil-tiket"></div>
+    <div id="error-msg"></div>
+
+    <script>
+        let eventsData = [];
+
+        // ✅ PERBAIKAN: URL yang benar (tanpa double "api")
+        async function loadEvents() {
+            try {
+                // URL BENAR: /.netlify/functions/api/events
+                const response = await fetch('/.netlify/functions/api/events');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                eventsData = await response.json();
+                
+                const container = document.getElementById('event-list');
+                const select = document.getElementById('event-select');
+                
+                // Render daftar konser
+                container.innerHTML = eventsData.map((e, index) => `
+                    <div class="card">
+                        <h3> ${e.nama}</h3>
+                        <p><strong>🎤 Artis:</strong> ${e.artis}</p>
+                        <p><strong>📅 Tanggal:</strong> ${e.tanggal}</p>
+                        <p class="price"> Harga: Rp ${e.harga.toLocaleString('id-ID')}</p>
+                        <span class="badge">✅ Tersedia</span>
+                    </div>
+                `).join('');
+                
+                // Isi dropdown (PERBAIKAN: tidak ada duplikat)
+                select.innerHTML = '<option value="">-- Pilih Konser --</option>' + 
+                    eventsData.map((e, index) => `
+                        <option value="${index}">${e.artis} - ${e.nama} (${e.tanggal})</option>
+                    `).join('');
+                    
+            } catch (error) {
+                document.getElementById('event-list').innerHTML = 
+                    `<div class="error">❌ Error: ${error.message}<br><br>
+                    <small>Pastikan Netlify Functions sudah ter-deploy dengan benar.</small></div>`;
+                console.error('Error loading events:', error);
+            }
+        }
+
+        // ✅ PERBAIKAN: URL POST juga diperbaiki
+        async function pesanTiket() {
+            const nama = document.getElementById('nama-input').value.trim();
+            const eventSelect = document.getElementById('event-select');
+            const eventId = eventSelect.value;
+            const errorMsg = document.getElementById('error-msg');
+            const hasilDiv = document.getElementById('hasil-tiket');
+            const btn = document.getElementById('btn-pesan');
+            
+            errorMsg.innerHTML = '';
+            hasilDiv.innerHTML = '';
+            
+            if (!nama) {
+                errorMsg.innerHTML = '<div class="error">⚠️ Nama tidak boleh kosong!</div>';
+                return;
+            }
+            
+            if (!eventId) {
+                errorMsg.innerHTML = '<div class="error">⚠️ Pilih konser terlebih dahulu!</div>';
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = 'Memproses...';
+            
+            try {
+                // URL BENAR: /.netlify/functions/api/pesan
+                const response = await fetch('/.netlify/functions/api/pesan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        nama: nama, 
+                        event_id: parseInt(eventId) 
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.tiket) {
+                    hasilDiv.innerHTML = `
+                        <div class="ticket">
+                            <h3>✅ Tiket Berhasil Diterbitkan!</h3>
+                            <p><strong>🎫 Kode Tiket:</strong> ${result.tiket.kode}</p>
+                            <p><strong>🎵 Event:</strong> ${result.tiket.event}</p>
+                            <p><strong>👤 Pembeli:</strong> ${result.tiket.pembeli}</p>
+                            <p><strong>💰 Harga:</strong> Rp ${result.tiket.harga.toLocaleString('id-ID')}</p>
+                            <p><strong>✅ Status:</strong> ${result.tiket.status}</p>
+                        </div>
+                    `;
+                    // Reset form
+                    document.getElementById('nama-input').value = '';
+                    eventSelect.value = '';
+                } else {
+                    errorMsg.innerHTML = `<div class="error">❌ ${result.message || 'Gagal memesan tiket'}</div>`;
+                }
+            } catch (error) {
+                errorMsg.innerHTML = `<div class="error"> Error: ${error.message}</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Beli Tiket';
+            }
+        }
+
+        // Jalankan saat halaman dibuka
+        loadEvents();
+    </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+[build]
+  command = "echo 'No build needed'"
+  publish = "public"
+
+[functions]
+  directory = "netlify/functions"
+  runtime = "python3.9"
+  node_bundler = "esbuild"
