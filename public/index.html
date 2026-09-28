@@ -6,6 +6,15 @@
 <title>KonserKu - Pemesanan Tiket Konser</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- TAMBAHKAN EMAILJS DI SINI -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+  (function(){
+    emailjs.init({ publicKey: "wiGT05-lU70klmshz" });
+  })();
+</script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
@@ -1257,65 +1266,43 @@ function updateTransactionStatus(txId,status){
 }
 
 // ==========================================
-// EMAIL SYSTEM (Simulasi)
+// EMAIL SYSTEM - EMAILJS (BENERAN TERKIRIM!)
 // ==========================================
 function sendTicketEmail(ticket){
-  const email=ticket.email;
-  const name=ticket.buyer;
-  const eventName=ticket.event.name;
-  const eventDate=formatDate(ticket.event.date);
-  const eventTime=ticket.event.time;
-  const venue=ticket.event.venue;
-  const seats=ticket.seats.join(', ');
-  const total=ticket.total;
-  const txId=ticket.txId;
-  const ticketId=ticket.id;
+  const email = ticket.email;
+  const name = ticket.buyer;
   
-  // Simulasi kirim email
-  console.log(`
-📧 Email Terkirim!
-Dari: KonserKuAsik@gmail.com
-Kepada: ${email}
-Subjek:  Tiket Konser ${eventName} - KonserKu
-
-Halo ${name},
-
-Terima kasih telah memesan tiket konser di KonserKu! 🎉
-
-Detail Pemesanan:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎵 Event: ${eventName}
-📅 Tanggal: ${eventDate}
-⏰ Waktu: ${eventTime}
-📍 Venue: ${venue}
-🪑 Kursi: ${seats}
-💰 Total: Rp ${total.toLocaleString('id-ID')}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-ID Transaksi: ${txId}
-ID Tiket: ${ticketId}
-
-Barcode Tiket:
-[QR Code: ${ticketId}]
-
-Bukti Pembayaran:
-Status: ✅ LUNAS
-Metode: QRIS
-Waktu: ${new Date().toLocaleString('id-ID')}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Sampai jumpa di konser! 🎶
-
-Salam hangat,
-Tim KonserKu
-KonserKuAsik@gmail.com
-  `);
+  // Parameter yang dikirim ke EmailJS (harus sama dengan {{variable}} di template EmailJS kamu)
+  const templateParams = {
+    to_email: email,
+    buyer_name: name,
+    event_name: ticket.event.name,
+    event_date: formatDate(ticket.event.date),
+    event_time: ticket.event.time,
+    venue: ticket.event.venue,
+    seats: ticket.seats.join(', '),
+    total: ticket.total.toLocaleString('id-ID'),
+    ticket_id: ticket.id,
+    transaction_id: ticket.txId,
+    from_name: 'KonserKu',
+    reply_to: 'kaniaagarista@gmail.com'
+  };
   
-  // Tampilkan notifikasi email terkirim
-  setTimeout(()=>{
-    showToast(`📧 Email tiket terkirim ke ${email}`,'success');
-  },2000);
+  // Konfigurasi EmailJS Anda
+  const SERVICE_ID = 'service_wo1wc25';
+  const TEMPLATE_ID = 'c2qlflw';
+  
+  showToast('⏳ Mengirim email tiket ke ' + email + '...','info');
+  
+  // Kirim email via EmailJS
+  emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+    .then(function(response) {
+      console.log('✅ Email berhasil dikirim!', response.status, response.text);
+      showToast('✅ Email tiket terkirim ke ' + email + ' 📧','success');
+    }, function(error) {
+      console.error('❌ Gagal kirim email:', error);
+      showToast('⚠️ Email gagal terkirim. Cek console (F12) untuk detail.','warn');
+    });
 }
 
 // ==========================================
