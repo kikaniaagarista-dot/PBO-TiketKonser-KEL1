@@ -343,6 +343,8 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
     <button class="nav-btn" data-page="groups" onclick="showPage('groups')">Grup Konser</button>
     <button class="nav-btn" data-page="admin" onclick="handleAdminAccess()">Admin</button>
     <div class="user-badge" id="userBadge" onclick="openProfileModal()"> <span id="userName">Andi</span></div>
+    <div class="user-badge" id="userBadge" onclick="openProfileModal()"> <span id="userName">Andi</span></div>
+    <button class="nav-btn" onclick="handleLogout()" style="color:#ef4444;font-weight:bold;">🚪 Logout</button>
   </div>
 </nav>
 
@@ -452,11 +454,12 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
       <div class="card">
         <h3>💳 Metode Pembayaran</h3>
         <div class="payment-methods">
-          <div class="pay-method selected" data-method="qris" onclick="selectPay(this)"><div class="icon"></div>QRIS</div>
-          <div class="pay-method" data-method="gopay" onclick="selectPay(this)"><div class="icon">💚</div>GoPay</div>
-          <div class="pay-method" data-method="ovo" onclick="selectPay(this)"><div class="icon">💜</div>OVO</div>
-          <div class="pay-method" data-method="va" onclick="selectPay(this)"><div class="icon">🏦</div>VA Bank</div>
-          <div class="pay-method" data-method="cc" onclick="selectPay(this)"><div class="icon">💳</div>Kartu Kredit</div>
+            <div class="pay-method selected" data-method="qris" onclick="selectPay(this)">
+                <div class="icon">📱</div>QRIS
+            </div>
+            <div class="pay-method" data-method="bank" onclick="selectPay(this)">
+                <div class="icon">🏦</div>Transfer Bank
+            </div>
         </div>
       </div>
     </div>
@@ -492,6 +495,32 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
       </div>
       <button class="btn full success" onclick="simulatePaid()">✅ Simulasi: Pembayaran Berhasil</button>
       <button class="btn ghost full" style="margin-top:10px" onclick="showPage('checkout')">← Kembali ke Checkout</button>
+    </div>
+  </div>
+</div>
+
+<!-- BANK PAYMENT PAGE -->
+<div class="page" id="page-bank">
+  <div class="qris-container">
+    <div class="card">
+      <h3>🏦 Instruksi Transfer Bank</h3>
+      <p style="color:#94a3b8;margin-bottom:15px">Lakukan transfer ke Virtual Account berikut sebelum waktu habis.</p>
+      
+      <div class="qris-detail">
+        <div class="row"><span class="label">Bank</span><span class="value">BANK BCA (Simulasi)</span></div>
+        <div class="row"><span class="label">No. Virtual Account</span><span class="value" id="bankVANumber" style="font-family:monospace;font-size:18px;color:#fbbf24">-</span></div>
+        <div class="row"><span class="label">Nama Penerima</span><span class="value">PT KONSERKU INDONESIA</span></div>
+        <div class="row"><span class="label">Nominal Transfer</span><span class="value" id="bankAmount" style="color:#10b981;font-size:18px">-</span></div>
+        <div class="row"><span class="label">Batas Waktu</span><span class="value" id="bankExpiry">-</span></div>
+      </div>
+
+      <div class="form-group" style="margin-top:20px">
+        <label>📤 Upload Bukti Transfer</label>
+        <input type="file" id="bankProof" accept="image/*" style="padding:10px" />
+      </div>
+
+      <button class="btn full success" onclick="confirmBankTransfer()">✅ Saya Sudah Transfer & Upload Bukti</button>
+      <button class="btn ghost full" style="margin-top:10px" onclick="showPage('checkout')">← Kembali</button>
     </div>
   </div>
 </div>
@@ -562,6 +591,7 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
       </div>
       <div>
         <button class="btn ghost" onclick="leavePartnerChat()" style="padding:6px 12px;font-size:12px">⬅️ Kembali</button>
+        <button class="btn danger" onclick="leaveCurrentGroup()" style="padding:6px 12px;font-size:12px">🚪 Keluar Grup</button>
       </div>
     </div>
     <div class="chat-messages" id="partnerChatMessages"></div>
@@ -584,6 +614,7 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
       </div>
       <div>
         <button class="btn ghost" onclick="showPage('tickets')" style="padding:6px 12px;font-size:12px">⬅️ Kembali</button>
+        <button class="btn danger" onclick="leaveCurrentGroup()" style="padding:6px 12px;font-size:12px">🚪 Keluar Grup</button>
       </div>
     </div>
     <div class="chat-messages" id="soloChatMessages"></div>
@@ -634,14 +665,16 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
 <!-- ADMIN -->
 <div class="page" id="page-admin">
   <h2 class="section-title">🎛️ Dashboard Admin</h2>
-  <div class="tabs">
-    <div class="tab active" onclick="showAdminTab('stats')">📊 Statistik</div>
-    <div class="tab" onclick="showAdminTab('transactions')">💳 Riwayat Transaksi</div>
-    <div class="tab" onclick="showAdminTab('events')">🎤 Manajemen Event</div>
-    <div class="tab" onclick="showAdminTab('groups')">👥 Pengawasan Grup</div>
-    <div class="tab" onclick="showAdminTab('warnings')">️ Kirim Peringatan</div>
-  </div>
-  
+<div class="tabs">
+  <div class="tab active" onclick="showAdminTab('stats')">📊 Statistik</div>
+  <div class="tab" onclick="showAdminTab('transactions')">💳 Riwayat Transaksi</div>
+  <div class="tab" onclick="showAdminTab('events')">🎤 Manajemen Event</div>
+  <div class="tab" onclick="showAdminTab('tickets')">🎫 Manajemen Tiket</div>
+  <div class="tab" onclick="showAdminTab('bank-verify')">🏦 Verifikasi Bank</div>
+  <div class="tab" onclick="showAdminTab('groups')">👥 Pengawasan Grup</div>
+  <div class="tab" onclick="showAdminTab('warnings')">⚠️ Kirim Peringatan</div>
+</div>
+
   <div id="adminTab-stats">
     <div class="stat-grid">
       <div class="stat-card"><div class="label">Total Tiket Terjual</div><div class="value" id="statTickets">0</div></div>
@@ -661,18 +694,43 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
     </div>
   </div>
   
-  <div id="adminTab-events" style="display:none">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
-        <h3> Manajemen Event</h3>
-        <button class="btn" onclick="showToast('Fitur buat event (demo)','info')">+ Buat Event</button>
-      </div>
-      <table>
-        <thead><tr><th>Event</th><th>Tanggal</th><th>Terjual</th><th>Status</th><th>Aksi</th></tr></thead>
-        <tbody id="adminEventTable"></tbody>
-      </table>
+<div id="adminTab-events" style="display:none">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+      <h3>🎤 Manajemen Event</h3>
+      <button class="btn" onclick="document.getElementById('addEventModal').classList.add('show')">+ Buat Event Baru</button>
+    </div>
+    <table>
+      <thead><tr><th>Event</th><th>Tanggal</th><th>Terjual</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody id="adminEventTable"></tbody>
+    </table>
+  </div>
+  
+  <!-- FITUR BARU: Kontrol Tiket Per Event -->
+  <div class="card" style="margin-top:20px">
+    <h3>🎫 Kontrol Tiket Penonton</h3>
+    <p style="color:#94a3b8;margin-bottom:15px">Admin dapat membatalkan tiket penonton secara paksa (misal: penipuan atau pelanggaran).</p>
+    <table>
+      <thead><tr><th>ID Tiket</th><th>Pembeli</th><th>Event</th><th>Status</th><th>Aksi Admin</th></tr></thead>
+      <tbody id="adminTicketControlTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Tambah Event -->
+<div class="modal" id="addEventModal">
+  <div class="modal-box">
+    <h2>Tambah Event Baru</h2>
+    <div class="form-group"><label>Nama Event</label><input type="text" id="newEventName" /></div>
+    <div class="form-group"><label>Artis</label><input type="text" id="newEventArtist" /></div>
+    <div class="form-group"><label>Tanggal (YYYY-MM-DD)</label><input type="date" id="newEventDate" /></div>
+    <div class="form-group"><label>Harga Dasar</label><input type="number" id="newEventPrice" /></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
+      <button class="btn ghost" onclick="closeModal('addEventModal')">Batal</button>
+      <button class="btn success" onclick="createNewEvent()">Simpan Event</button>
     </div>
   </div>
+</div>
   
   <div id="adminTab-groups" style="display:none">
     <div class="card">
@@ -684,7 +742,29 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
       </table>
     </div>
   </div>
-  
+  <!-- Tab Manajemen Tiket (BARU) -->
+<div id="adminTab-tickets" style="display:none">
+  <div class="card">
+    <h3>🎫 Manajemen Tiket Penonton</h3>
+    <p style="color:#94a3b8;margin-bottom:15px">Admin dapat melihat dan membatalkan tiket penonton.</p>
+    <table>
+      <thead><tr><th>ID Tiket</th><th>Pembeli</th><th>Event</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody id="adminTicketTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Tab Verifikasi Bank (BARU) -->
+<div id="adminTab-bank-verify" style="display:none">
+  <div class="card">
+    <h3>🏦 Verifikasi Pembayaran Transfer Bank</h3>
+    <p style="color:#94a3b8;margin-bottom:15px">Verifikasi bukti transfer dari pembeli sebelum menerbitkan tiket.</p>
+    <table>
+      <thead><tr><th>ID Transaksi</th><th>Pembeli</th><th>Nominal</th><th>Bukti</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody id="adminBankVerifyTable"></tbody>
+    </table>
+  </div>
+</div>
   <div id="adminTab-warnings" style="display:none">
     <div class="card">
       <h3>⚠️ Kirim Peringatan ke Grup Konser</h3>
@@ -771,6 +851,82 @@ let state = {
 };
 
 // ==========================================
+// USER DATA MANAGEMENT (FIX GANTI AKUN)
+// ==========================================
+function getUserKey(baseKey) {
+    // Membuat key unik berdasarkan email user yang sedang login
+    return state.currentUser ? `${baseKey}_${state.currentUser.email}` : baseKey;
+}
+
+function saveUserData() {
+    if (!state.currentUser) return;
+    saveUserData()(getUserKey('kk_tickets'), JSON.stringify(state.tickets));
+    saveUserData()(getUserKey('kk_transactions'), JSON.stringify(state.transactions));
+    saveUserData()(getUserKey('kk_groups'), JSON.stringify(state.groups));
+    saveUserData()(getUserKey('kk_ratings'), JSON.stringify(state.ratings));
+}
+
+function loadUserData() {
+    if (!state.currentUser) {
+        state.tickets = [];
+        state.transactions = [];
+        state.groups = [];
+        state.ratings = [];
+        return;
+    }
+    // Hanya memuat data milik user yang sedang login
+    state.tickets = JSON.parse(localStorage.getItem(getUserKey('kk_tickets')) || '[]');
+    state.transactions = JSON.parse(localStorage.getItem(getUserKey('kk_transactions')) || '[]');
+    state.groups = JSON.parse(localStorage.getItem(getUserKey('kk_groups')) || '[]');
+    state.ratings = JSON.parse(localStorage.getItem(getUserKey('kk_ratings')) || '[]');
+}
+
+// ==========================================
+// USER DATA MANAGEMENT (FIX GANTI AKUN)
+// ==========================================
+function getUserKey(baseKey) {
+    // Membuat key unik berdasarkan email user yang sedang login
+    return state.currentUser ? `${baseKey}_${state.currentUser.email}` : baseKey;
+}
+
+function saveUserData() {
+    if (!state.currentUser) return;
+    saveUserData()(getUserKey('kk_tickets'), JSON.stringify(state.tickets));
+    saveUserData()(getUserKey('kk_transactions'), JSON.stringify(state.transactions));
+    saveUserData()(getUserKey('kk_groups'), JSON.stringify(state.groups));
+    saveUserData()(getUserKey('kk_ratings'), JSON.stringify(state.ratings));
+}
+
+function loadUserData() {
+    if (!state.currentUser) {
+        state.tickets = [];
+        state.transactions = [];
+        state.groups = [];
+        state.ratings = [];
+        return;
+    }
+    // Hanya memuat data milik user yang sedang login
+    state.tickets = JSON.parse(localStorage.getItem(getUserKey('kk_tickets')) || '[]');
+    state.transactions = JSON.parse(localStorage.getItem(getUserKey('kk_transactions')) || '[]');
+    state.groups = JSON.parse(localStorage.getItem(getUserKey('kk_groups')) || '[]');
+    state.ratings = JSON.parse(localStorage.getItem(getUserKey('kk_ratings')) || '[]');
+}
+
+// Fungsi khusus Admin untuk melihat rekap SEMUA data dari semua user
+function getAllUsersData(baseKey) {
+    let allData = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith(baseKey + '_')) {
+            try {
+                const data = JSON.parse(localStorage.getItem(key) || '[]');
+                allData = allData.concat(data);
+            } catch(e) {}
+        }
+    }
+    return allData;
+}
+// ==========================================
 // LOGIN SYSTEM
 // ==========================================
 function handleLogin(){
@@ -797,8 +953,10 @@ function handleLogin(){
     name:email.split('@')[0].charAt(0).toUpperCase()+email.split('@')[0].slice(1),
     phone:'081234567890'
   };
-  localStorage.setItem('kk_currentUser',JSON.stringify(state.currentUser));
+  saveUserData()('kk_currentUser',JSON.stringify(state.currentUser));
   
+  loadUserData();
+
   // Tampilkan web
   document.getElementById('loginOverlay').style.display='none';
   document.getElementById('mainNavbar').style.display='flex';
@@ -828,6 +986,7 @@ function checkLoginStatus(){
   const saved=localStorage.getItem('kk_currentUser');
   if(saved){
     state.currentUser=JSON.parse(saved);
+    loadUserData();
     document.getElementById('loginOverlay').style.display='none';
     document.getElementById('mainNavbar').style.display='flex';
     document.getElementById('mainContainer').style.display='block';
@@ -837,6 +996,34 @@ function checkLoginStatus(){
     renderHome();
     renderEvents();
   }
+}
+
+function handleLogout() {
+    if (!confirm('Yakin ingin keluar dari akun ini?')) return;
+    
+    // Hapus sesi login
+    localStorage.removeItem('kk_currentUser');
+    
+    // Reset state data agar kosong untuk login berikutnya
+    state.currentUser = null;
+    state.tickets = [];
+    state.transactions = [];
+    state.groups = [];
+    state.ratings = [];
+    state.currentEvent = null;
+    state.currentTicket = null;
+    state.currentGroup = null;
+    
+    // Kembalikan tampilan ke halaman Login
+    document.getElementById('loginOverlay').style.display = 'flex';
+    document.getElementById('mainNavbar').style.display = 'none';
+    document.getElementById('mainContainer').style.display = 'none';
+    
+    // Kosongkan form login
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPassword').value = '';
+    
+    showToast('👋 Anda telah berhasil logout.', 'info');
 }
 
 // ==========================================
@@ -861,20 +1048,20 @@ function handleAdminAccess(){
   if(username==='adminkonserku'&&password==='admin321'){
     // Login berhasil
     state.adminLoginAttempts=0;
-    localStorage.setItem('kk_admin_attempts','0');
+    saveUserData()('kk_admin_attempts','0');
     showToast('✅ Login admin berhasil!','success');
     showPage('admin');
   } else {
     // Login gagal
     state.adminLoginAttempts++;
-    localStorage.setItem('kk_admin_attempts',state.adminLoginAttempts.toString());
+    saveUserData()('kk_admin_attempts',state.adminLoginAttempts.toString());
     
     if(state.adminLoginAttempts>=3){
       // Lock 2 menit
       state.adminLockUntil=now+(2*60*1000);
-      localStorage.setItem('kk_admin_lock',state.adminLockUntil.toString());
+      saveUserData()('kk_admin_lock',state.adminLockUntil.toString());
       state.adminLoginAttempts=0;
-      localStorage.setItem('kk_admin_attempts','0');
+      saveUserData()('kk_admin_attempts','0');
       alert('🔒 AKUN TERKUNCI!\n\n3x percobaan login gagal.\n\nAkun admin terkunci selama 2 menit.\nSilakan coba lagi nanti.');
     } else {
       alert(`❌ Login gagal!\n\nUsername atau password salah.\n\nPercobaan: ${state.adminLoginAttempts}/3\n\n⚠️ Jika gagal 3x, akun akan terkunci 2 menit.`);
@@ -921,7 +1108,7 @@ function saveProfile(){
   state.currentUser.name=name;
   state.currentUser.email=email;
   state.currentUser.phone=phone;
-  localStorage.setItem('kk_currentUser',JSON.stringify(state.currentUser));
+  saveUserData()('kk_currentUser',JSON.stringify(state.currentUser));
   
   document.getElementById('userName').textContent=name;
   document.getElementById('buyerName').value=name;
@@ -1092,17 +1279,25 @@ function renderSeatMap(){
   }
 }
 
-function toggleSeat(el){
-  if(el.classList.contains('taken')||el.classList.contains('hold'))return;
-  const id=el.dataset.id;
-  const idx=state.selectedSeats.findIndex(s=>s.id===id);
-  if(idx>=0){state.selectedSeats.splice(idx,1);el.classList.remove('selected')}
-  else {
-    if(state.selectedSeats.length>=6){showToast('⚠️ Maksimal 6 tiket','warn');return}
-    state.selectedSeats.push({id,cat:el.dataset.cat,price:parseInt(el.dataset.price)});
-    el.classList.add('selected');
-  }
-  updateSeatSummary();
+function toggleGroupStatus(groupId, newStatus) {
+    const group = state.groups.find(g => g.id === groupId);
+    if (!group) return;
+    
+    const actionText = newStatus === 'concert' ? 'MEMULAI KONSER (tutup chat)' : newStatus === 'closed' ? 'MENUTUP GRUP' : 'MEMBUKA GRUP';
+    const confirmed = confirm(`⚠️ Konfirmasi Admin\n\nAnda yakin ingin ${actionText} untuk grup "${group.eventName}"?`);
+    
+    if (confirmed) {
+        group.status = newStatus;
+        if (newStatus === 'closed') {
+            group.closedAt = new Date().toISOString();
+            group.messages.push({type: 'system', text: '🔒 Grup ditutup oleh admin. Terima kasih telah bergabung!', time: new Date().toISOString()});
+        } else if (newStatus === 'concert') {
+            group.messages.push({type: 'system', text: '🎵 Konser sedang berlangsung! Chat ditutup sementara untuk kenyamanan bersama.', time: new Date().toISOString()});
+        }
+        saveUserData()('kk_groups', JSON.stringify(state.groups));
+        showToast(`✅ Grup "${group.eventName}" berhasil diubah statusnya!`, 'success');
+        renderAdminGroups();
+    }
 }
 
 function updateSeatSummary(){
@@ -1190,7 +1385,7 @@ function processPayment(){
     paidAt:null
   };
   state.transactions.unshift(transaction);
-  localStorage.setItem('kk_transactions',JSON.stringify(state.transactions));
+  saveUserData()('kk_transactions',JSON.stringify(state.transactions));
   
   document.getElementById('qrisTxId').textContent=txId;
   document.getElementById('qrisBuyer').textContent=transaction.buyer;
@@ -1222,6 +1417,22 @@ function processPayment(){
   showPage('qris');
 }
 
+function confirmBankTransfer() {
+    const file = document.getElementById('bankProof').files[0];
+    if (!file) {
+        showToast('⚠️ Harap upload bukti transfer terlebih dahulu!', 'warn');
+        return;
+    }
+    
+    showToast('⏳ Bukti transfer sedang dikirim untuk diverifikasi admin...', 'info');
+    
+    // Simulasi masuk ke antrean verifikasi admin
+    setTimeout(() => {
+        showToast('✅ Bukti terkirim! Status tiket: Menunggu Verifikasi Admin. Cek halaman "Tiket Saya".', 'success');
+        showPage('tickets');
+    }, 1500);
+}
+
 function simulatePaid(){
   if(!state._currentTxId)return;
   clearInterval(state.payTimer);
@@ -1245,7 +1456,7 @@ function simulatePaid(){
       mode:null
     };
     state.tickets.unshift(ticket);
-    localStorage.setItem('kk_tickets',JSON.stringify(state.tickets));
+    saveUserData()('kk_tickets',JSON.stringify(state.tickets));
     state.currentTicket=ticket;
     
     // Kirim email simulasi
@@ -1261,7 +1472,7 @@ function updateTransactionStatus(txId,status){
   if(tx){
     tx.status=status;
     if(status==='success')tx.paidAt=new Date().toISOString();
-    localStorage.setItem('kk_transactions',JSON.stringify(state.transactions));
+    saveUserData()('kk_transactions',JSON.stringify(state.transactions));
   }
 }
 
@@ -1410,7 +1621,7 @@ function createGroup(size,members){
     ratings:[]
   };
   state.groups.unshift(group);
-  localStorage.setItem('kk_groups',JSON.stringify(state.groups));
+  saveUserData()('kk_groups',JSON.stringify(state.groups));
   return group;
 }
 
@@ -1455,7 +1666,7 @@ function renderPartnerMessages(){
     }
     if(m.type==='warning'){
       const warningClass=m.warningType==='disaster'?'warning-disaster':m.warningType==='riot'?'warning-riot':'warning-medical';
-      const icon=m.warningType==='disaster'?'🌊':m.warningType==='riot'?'️':'🏥';
+      const icon=m.warningType==='disaster'?'🌊':m.warningType==='riot'?'⚠️':'🏥';
       return `<div class="chat-msg admin ${warningClass}">
         <div class="av">${icon}</div>
         <div>
@@ -1482,7 +1693,7 @@ function sendPartnerChat(){
   if(state.currentGroup.status!=='active'){showToast('⚠️ Grup sudah ditutup','warn');return}
   
   state.currentGroup.messages.push({type:'user',sender:state.currentUser.name,text,time:new Date().toISOString()});
-  localStorage.setItem('kk_groups',JSON.stringify(state.groups));
+  saveUserData()('kk_groups',JSON.stringify(state.groups));
   document.getElementById('partnerChatText').value='';
   renderPartnerMessages();
 }
@@ -1503,7 +1714,7 @@ function simulatePartnerChat(){
     const partner=state.currentGroup.members[Math.floor(Math.random()*(state.currentGroup.members.length-1))+1];
     if(partner){
       state.currentGroup.messages.push({type:'user',sender:partner.name,text:responses[idx%responses.length],time:new Date().toISOString()});
-      localStorage.setItem('kk_groups',JSON.stringify(state.groups));
+      saveUserData()('kk_groups',JSON.stringify(state.groups));
       renderPartnerMessages();
       idx++;
     }
@@ -1521,7 +1732,7 @@ function proposeConcertAgain(){
     if(allAgree){
       group.messages.push({type:'system',text:'✅ Semua partner setuju untuk konser ulang! Grup akan ditutup.',time:new Date().toISOString()});
       group.status='completed';
-      localStorage.setItem('kk_groups',JSON.stringify(state.groups));
+      saveUserData()('kk_groups',JSON.stringify(state.groups));
       showToast('🎉 Kembali ke beranda untuk pilih partner baru!','success');
       showPage('home');
     }
@@ -1558,7 +1769,7 @@ function joinSoloGroup(){
       ratings:[]
     };
     state.groups.unshift(group);
-    localStorage.setItem('kk_groups',JSON.stringify(state.groups));
+    saveUserData()('kk_groups',JSON.stringify(state.groups));
   }
   state.currentGroup=group;
   showSoloChat();
@@ -1644,7 +1855,7 @@ function sendSoloChat(){
   if(state.currentGroup.status!=='active'){showToast('⚠️ Grup sedang ditutup','warn');return}
   
   state.currentGroup.messages.push({type:'user',sender:state.currentUser.name,text,time:new Date().toISOString()});
-  localStorage.setItem('kk_groups',JSON.stringify(state.groups));
+  saveUserData()('kk_groups',JSON.stringify(state.groups));
   document.getElementById('soloChatText').value='';
   renderSoloMessages();
 }
@@ -1666,10 +1877,10 @@ function submitSoloRating(){
   
   state.currentGroup.ratings.push({user:state.currentUser.name,rating:soloRatingValue,comment,time:new Date().toISOString()});
   state.currentGroup.messages.push({type:'system',text:`⭐ ${state.currentUser.name} memberikan rating ${soloRatingValue} bintang`,time:new Date().toISOString()});
-  localStorage.setItem('kk_groups',JSON.stringify(state.groups));
+  saveUserData()('kk_groups',JSON.stringify(state.groups));
   
   state.ratings.push({eventId:state.currentGroup.eventId,userId:state.currentUser.email,rating:soloRatingValue,comment});
-  localStorage.setItem('kk_ratings',JSON.stringify(state.ratings));
+  saveUserData()('kk_ratings',JSON.stringify(state.ratings));
   
   showToast('⭐ Terima kasih atas rating Anda!','success');
   showSoloChat();
@@ -1837,10 +2048,14 @@ function showAdminTab(tab){
 }
 
 function renderStats(){
-  const totalTickets=state.transactions.filter(t=>t.status==='success').length;
-  const revenue=state.transactions.filter(t=>t.status==='success').reduce((a,b)=>a+b.amount,0);
-  const success=state.transactions.filter(t=>t.status==='success').length;
-  const groups=state.groups.filter(g=>g.status==='active').length;
+  const allTx = getAllUsersData('kk_transactions');
+  const allGroups = getAllUsersData('kk_groups');
+  
+  const totalTickets = allTx.filter(t=>t.status==='success').reduce((sum, t) => sum + (t.seats ? t.seats.length : 1), 0);
+  const revenue = allTx.filter(t=>t.status==='success').reduce((a,b)=>a+b.amount,0);
+  const success = allTx.filter(t=>t.status==='success').length;
+  const groups = allGroups.filter(g=>g.status==='active'||g.status==='concert').length;
+  
   document.getElementById('statTickets').textContent=totalTickets;
   document.getElementById('statRevenue').textContent='Rp '+revenue.toLocaleString('id-ID');
   document.getElementById('statSuccess').textContent=success;
@@ -1849,11 +2064,12 @@ function renderStats(){
 
 function renderTransactions(){
   const tbody=document.getElementById('transactionTable');
-  if(state.transactions.length===0){
+  const allTx = getAllUsersData('kk_transactions');
+  if(allTx.length===0){
     tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#94a3b8">Belum ada transaksi</td></tr>';
     return;
   }
-  tbody.innerHTML=state.transactions.map(t=>`
+  tbody.innerHTML=allTx.map(t=>`
     <tr>
       <td><code>${t.id}</code></td>
       <td>${t.buyer}<br><small style="color:#94a3b8">${t.email}</small></td>
@@ -1906,36 +2122,128 @@ function toggleEventStatus(eventId,newStatus){
   }
 }
 
+function renderAdminTickets() {
+    const tbody = document.getElementById('adminTicketTable');
+    const allTickets = getAllUsersData('kk_tickets');
+    if (allTickets.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:20px">Belum ada tiket</td></tr>';
+        return;
+    }
+    tbody.innerHTML = allTickets.map(t => `
+        <tr>
+            <td><code>${t.id}</code></td>
+            <td>${t.buyer}<br><small style="color:#94a3b8">${t.email}</small></td>
+            <td>${t.event.name}</td>
+            <td><span class="badge ${t.status === 'active' ? 'success' : t.status === 'cancelled' ? 'danger' : 'warn'}">${t.status.toUpperCase()}</span></td>
+            <td>
+                ${t.status === 'active' ? `<button class="btn danger" style="padding:4px 8px;font-size:11px" onclick="adminCancelTicket('${t.id}')">Batalkan Paksa</button>` : '-'}
+            </td>
+        </tr>
+    `).join('');
+}
+
+function renderAdminBankVerify() {
+    const tbody = document.getElementById('adminBankVerifyTable');
+    // Simulasi data untuk demo
+    tbody.innerHTML = `
+        <tr>
+            <td><code>TX99887766</code></td>
+            <td>Budi Santoso<br><small style="color:#94a3b8">budi@email.com</small></td>
+            <td>Rp 865.000</td>
+            <td><button class="btn ghost" style="padding:4px 8px;font-size:11px">📷 Lihat Bukti</button></td>
+            <td><span class="badge warn">Menunggu</span></td>
+            <td>
+                <button class="btn success" style="padding:4px 8px;font-size:11px" onclick="showToast('✅ Diverifikasi!', 'success')">Terima</button>
+                <button class="btn danger" style="padding:4px 8px;font-size:11px" onclick="showToast('❌ Ditolak!', 'error')">Tolak</button>
+            </td>
+        </tr>
+    `;
+}
+
+function adminCancelTicket(ticketId) {
+    if (!confirm('⚠️ Yakin ingin membatalkan tiket ini secara paksa? Tindakan ini tidak dapat dibatalkan.')) return;
+    const ticket = state.tickets.find(t => t.id === ticketId);
+    if (ticket) {
+        ticket.status = 'cancelled';
+        saveUserData()('kk_tickets', JSON.stringify(state.tickets));
+        
+        // Tutup grup terkait jika ada
+        const group = state.groups.find(g => g.ticketId === ticketId);
+        if (group) {
+            group.status = 'closed';
+            group.messages.push({type:'system', text:'🚫 Tiket ini dibatalkan oleh Admin. Grup ditutup.', time:new Date().toISOString()});
+            saveUserData()('kk_groups', JSON.stringify(state.groups));
+        }
+        
+        renderAdminTickets();
+        showToast('✅ Tiket berhasil dibatalkan oleh Admin.', 'success');
+    }
+}
+
 function renderAdminGroups(){
-  const tbody=document.getElementById('adminGroupTable');
-  if(state.groups.length===0){
-    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#94a3b8">Belum ada grup</td></tr>';
-    return;
-  }
-  tbody.innerHTML=state.groups.map(g=>{
+  const allGroups = getAllUsersData('kk_groups');
+  document.getElementById('adminGroupTable').innerHTML=allGroups.map(g=>{
     const memberCount=g.size==='solo'?g.totalMembers:g.members.length;
-    const statusClass=g.status==='active'?'success':g.status==='concert'?'warn':'danger';
-    const statusText=g.status==='active'?'Aktif':g.status==='concert'?'Konser':'Ditutup';
     return `<tr>
       <td><code>${g.id}</code></td>
       <td>${g.eventName}</td>
-      <td>${g.size==='solo'?'Solo (Besar)':g.size+' orang'}</td>
-      <td>${memberCount.toLocaleString()}</td>
-      <td><span class="badge ${statusClass}">${statusText}</span></td>
+      <td>${g.size==='solo'?'Solo':g.size+' orang'}</td>
+      <td>${memberCount}</td>
+      <td><span class="badge ${g.status==='active'?'success':g.status==='concert'?'warn':'danger'}">${g.status==='active'?'Aktif':g.status==='concert'?'Konser':'Ditutup'}</span></td>
       <td>
         <div class="event-actions">
+          <button class="btn ghost" style="padding:4px 8px;font-size:11px" onclick="viewGroupMembers('${g.id}')">👥 Lihat Anggota</button>
           ${g.status==='active'?`
-            <button class="btn warning" onclick="toggleGroupStatus('${g.id}','concert')">🎵 Mulai Konser</button>
+            <button class="btn warning" onclick="toggleGroupStatus('${g.id}','concert')"> Mulai Konser</button>
             <button class="btn danger" onclick="toggleGroupStatus('${g.id}','closed')">🔒 Tutup Grup</button>
           `:g.status==='concert'?`
             <button class="btn success" onclick="toggleGroupStatus('${g.id}','closed')">✅ Selesai Konser</button>
-          `:`
-            <button class="btn ghost" onclick="showToast('Grup sudah ditutup','info')">Ditutup</button>
-          `}
+          `:''}
         </div>
       </td>
     </tr>`;
   }).join('');
+}
+
+// Fungsi untuk melihat anggota grup
+function viewGroupMembers(groupId) {
+  const group = state.groups.find(g => g.id === groupId);
+  if(!group) { showToast('⚠️ Grup tidak ditemukan', 'warn'); return; }
+  
+  document.getElementById('groupMembersList').innerHTML = group.members.map(m => `
+    <div class="partner-item" style="display:flex;align-items:center;gap:15px;text-align:left;margin-bottom:10px;padding:10px;background:#0f172a;border-radius:8px">
+      <div class="av">${m.name.charAt(0)}</div>
+      <div style="flex:1">
+        <div class="name" style="font-weight:bold;color:#fbbf24">${m.name}</div>
+        <div style="color:#94a3b8;font-size:12px">📱 ${m.phone || '-'} | 🚻 ${m.gender || '-'}</div>
+        <div style="color:#94a3b8;font-size:12px">📝 ${m.desc || 'Tidak ada deskripsi'}</div>
+      </div>
+    </div>
+  `).join('');
+  
+  document.getElementById('groupMembersModal').classList.add('show');
+}
+
+// Fungsi untuk mengubah status grup
+function toggleGroupStatus(groupId, newStatus) {
+  const group = state.groups.find(g => g.id === groupId);
+  if(!group) return;
+  
+  const actionText = newStatus==='concert' ? 'MEMULAI KONSER (chat akan ditutup)' : newStatus==='closed' ? 'MENUTUP GRUP' : 'MEMBUKA GRUP';
+  const confirmed = confirm(`⚠️ Konfirmasi Admin\n\nAnda yakin ingin ${actionText} untuk grup "${group.eventName}"?`);
+  
+  if(confirmed) {
+    group.status = newStatus;
+    if(newStatus==='closed') {
+      group.closedAt = new Date().toISOString();
+      group.messages.push({type:'system', text:'🔒 Grup ditutup oleh admin. Terima kasih telah bergabung!', time:new Date().toISOString()});
+    } else if(newStatus==='concert') {
+      group.messages.push({type:'system', text:'🎵 Konser sedang berlangsung! Chat ditutup sementara untuk kenyamanan bersama.', time:new Date().toISOString()});
+    }
+    saveUserData()('kk_groups', JSON.stringify(state.groups));
+    showToast(`✅ Grup "${group.eventName}" berhasil ${newStatus==='concert'?'dimulai':newStatus==='closed'?'ditutup':'dibuka'}!`, 'success');
+    renderAdminGroups();
+  }
 }
 
 function toggleGroupStatus(groupId,newStatus){
@@ -1953,7 +2261,7 @@ function toggleGroupStatus(groupId,newStatus){
     } else if(newStatus==='concert'){
       group.messages.push({type:'system',text:' Konser sedang berlangsung! Chat ditutup sementara untuk kenyamanan bersama.',time:new Date().toISOString()});
     }
-    localStorage.setItem('kk_groups',JSON.stringify(state.groups));
+    saveUserData()('kk_groups',JSON.stringify(state.groups));
     showToast(`✅ Grup "${group.eventName}" berhasil ${newStatus==='concert'?'dimulai (chat ditutup)':newStatus==='closed'?'ditutup':'dibuka'}!`,'success');
     renderAdminGroups();
   }
@@ -1995,7 +2303,7 @@ function sendWarning(){
     time:new Date().toISOString()
   });
   
-  localStorage.setItem('kk_groups',JSON.stringify(state.groups));
+  saveUserData()('kk_groups',JSON.stringify(state.groups));
   document.getElementById('warningDesc').value='';
   showToast(`📢 Peringatan terkirim ke grup ${group.eventName}!`,'success');
 }
@@ -2027,5 +2335,15 @@ function showToast(msg,type='success'){
 // ==========================================
 checkLoginStatus();
 </script>
+<!-- MODAL LIHAT ANGGOTA GRUP -->
+<div class="modal" id="groupMembersModal">
+  <div class="modal-box">
+    <h2>👥 Anggota Grup</h2>
+    <div id="groupMembersList" style="max-height: 400px; overflow-y: auto; margin-top: 15px;"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:20px">
+      <button class="btn ghost" onclick="closeModal('groupMembersModal')">Tutup</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
