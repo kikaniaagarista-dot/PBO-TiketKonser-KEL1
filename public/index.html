@@ -1087,13 +1087,109 @@ function sendTicketEmail(ticket){
     .catch(() => showToast('⚠️ Email gagal terkirim. Cek console (F12).', 'warn'));
 }
 
+function confirmRealPayment(){
+  if(!state._currentTxId || state._paymentConfirmed) return;
+  
+  const proofFile = document.getElementById('paymentProof').files[0];
+  
+  showToast('⏳ Memverifikasi pembayaran...', 'info');
+  
+  setTimeout(() => {
+    state._paymentConfirmed = true;
+    clearInterval(state.payTimer);
+    
+    updateTransactionStatus(state._currentTxId, 'success');
+    document.getElementById('qrisStatus').innerHTML = '<span class="status-badge success">✅ Pembayaran Berhasil</span>';
+    
+    const tx = state.transactions.find(t => t.id === state._currentTxId);
+    const ticket = {
+      id: 'KK' + Date.now().toString().slice(-8), 
+      txId: state._currentTxId, 
+      event: tx.event, 
+      seats: tx.seats,
+      buyer: tx.buyer, 
+      email: tx.email, 
+      total: tx.amount, 
+      date: new Date().toISOString(), 
+      status: 'active', 
+      mode: null,
+      paymentProof: proofFile ? proofFile.name : null
+    };
+    state.tickets.unshift(ticket);
+    saveUserData();
+    state.currentTicket = ticket;
+    
+    // ✅ TAMBAHKAN 2 BARIS INI (Otomatis buat grup saat bayar berhasil)
+    const group = getConcertGroup(tx.event.id, tx.event.name);
+    state.currentGroup = group;
+    
+    sendTicketEmail(ticket);
+    showToast('✅ Pembayaran berhasil! Tiket terbit! 🎉', 'success');
+    
+    // Ganti 'mode' dengan langsung masuk ke grup
+    setTimeout(() => showSoloChat(), 1500);
+  }, 1500);
+}
+
 // ==========================================
 // MODE & GROUP SYSTEM
 // ==========================================
+function getConcertGroup(eventId, eventName) {
+  let group = state.groups.find(g => g.eventId == eventId && g.size === 'concert');
+  
+  if (!group) {
+    group = {
+      id: 'GRP-' + eventId, 
+      ticketId: 'ALL', 
+      eventId: eventId,
+      eventName: eventName,
+      size: 'concert',
+      totalMembers: Math.floor(Math.random() * 4000) + 1000,
+      members: [{name: state.currentUser.name, gender: '-', phone: state.currentUser.phone || '081234567890', desc: 'Penonton konser'}],
+      messages: [{type: 'system', text: `🎉 Selamat datang di grup diskusi resmi "${eventName}"! Silakan berdiskusi dengan sesama penonton.`, time: new Date().toISOString()}],
+      status: 'active',
+      createdAt: new Date().toISOString(),
+      concertStarted: false,
+      closedAt: null,
+      ratings: []
+    };
+    state.groups.unshift(group);
+    saveUserData();
+  } else {
+    const memberExists = group.members.some(m => m.name === state.currentUser.name);
+    if (!memberExists) {
+      group.members.push({name: state.currentUser.name, gender: '-', phone: state.currentUser.phone || '081234567890', desc: 'Penonton konser'});
+      saveUserData();
+    }
+  }
+  return group;
+}
+
+function joinConcertGroup(eventId, eventName){
+  // Pastikan getConcertGroup dipanggil untuk membuat/mendapatkan grup
+  const group = getConcertGroup(parseInt(eventId), eventName);
+  state.currentGroup = group;
+  
+  // Cari tiket user untuk konser ini
+  const safeTickets = Array.isArray(state.tickets) ? state.tickets : [];
+  state.currentTicket = safeTickets.find(t => t.event && t.event.id == eventId) || state.currentTicket;
+  
+  // Buka chat
+  showSoloChat();
+}
+
 function selectMode(mode){
-  state.currentMode = mode;
-  if(mode === 'solo') joinSoloGroup();
-  else showPage('partner');
+  // Apapun modenya (solo/partner), langsung masuk ke grup konser yang sama
+  if (!state.currentTicket || !state.currentTicket.event) {
+    showToast('⚠️ Data tiket tidak valid', 'warn');
+    return;
+  }
+  
+  const group = getConcertGroup(state.currentTicket.event.id, state.currentTicket.event.name);
+  state.currentGroup = group;
+  
+  // Langsung buka chat (pakai UI chat besar)
+  showSoloChat(); 
 }
 
 function selectPartnerCount(count){
@@ -1290,10 +1386,7 @@ function sendSoloChat(){
 function renderMyTickets(){
   const box = document.getElementById('myTicketsList');
   if(!box) return;
-  
-  // Pastikan data adalah array
   const safeTickets = Array.isArray(state.tickets) ? state.tickets : [];
-  const safeGroups = Array.isArray(state.groups) ? state.groups : [];
 
   if(safeTickets.length === 0){
     box.innerHTML = '<div class="card" style="text-align:center;color:#94a3b8">Belum ada tiket. Yuk pesan konser pertama Anda!</div>';
@@ -1302,9 +1395,9 @@ function renderMyTickets(){
 
   box.innerHTML = safeTickets.map(t => {
     const e = t.event || {};
-    // Gunakan == (loose equality) agar cocok walau tipe datanya beda (string vs number)
-    const group = safeGroups.find(g => g.ticketId == t.id);
-
+    // Cek apakah sudah ada grup untuk konser ini
+    const hasGroup = state.groups.some(g => g.size === 'concert' && g.eventId == e.id);
+    
     return `<div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
       <img src="${e.img || 'https://via.placeholder.com/100'}" style="width:100px;height:100px;border-radius:10px;object-fit:cover" />
       <div style="flex:1;min-width:200px">
@@ -1314,11 +1407,11 @@ function renderMyTickets(){
       </div>
       <div style="text-align:right;display:flex;flex-direction:column;gap:8px">
         <span class="badge success">AKTIF</span>
-        ${group 
-          ? `<button class="btn" onclick="openGroup('${group.id}')">💬 Buka Grup</button>` 
-          : `<button class="btn" onclick="openTicketMode('${t.id}')">Pilih Mode</button>`
+        <button class="btn" onclick="viewTicket('${t.id}')"> Lihat Barcode & Info</button>
+        ${hasGroup 
+          ? `<button class="btn success" onclick="joinConcertGroup('${e.id}','${e.name.replace(/'/g, "\\'")}')">💬 Masuk Grup Diskusi</button>` 
+          : `<button class="btn warning" onclick="joinConcertGroup('${e.id}','${e.name.replace(/'/g, "\\'")}')">🎉 Buat & Masuk Grup</button>`
         }
-        <button class="btn ghost" onclick="viewTicket('${t.id}')">Lihat Tiket</button>
       </div>
     </div>`;
   }).join('');
@@ -1388,72 +1481,58 @@ function downloadTicketPDF(ticketId){
 function renderMyGroups(){
   const box = document.getElementById('myGroupsList');
   if(!box) return;
-  
-  const safeTickets = Array.isArray(state.tickets) ? state.tickets : [];
   const safeGroups = Array.isArray(state.groups) ? state.groups : [];
 
-  // Filter grup yang punya tiket, dan hapus duplikat berdasarkan ticketId
+  // Filter hanya grup konser (size: 'concert') dan hapus duplikat berdasarkan eventId
   const uniqueGroups = [];
-  const seenTicketIds = new Set();
+  const seenEventIds = new Set();
 
   for (const g of safeGroups) {
-    const hasTicket = safeTickets.some(t => t.id == g.ticketId);
-    if (hasTicket && !seenTicketIds.has(String(g.ticketId))) {
+    if (g.size === 'concert' && !seenEventIds.has(String(g.eventId))) {
       uniqueGroups.push(g);
-      seenTicketIds.add(String(g.ticketId));
+      seenEventIds.add(String(g.eventId));
     }
   }
 
   if(uniqueGroups.length === 0){
-    box.innerHTML = '<div class="card" style="text-align:center;color:#94a3b8">Belum ada grup. Beli tiket dan pilih mode menonton!</div>';
+    box.innerHTML = '<div class="card" style="text-align:center;color:#94a3b8">Belum ada grup. Beli tiket konser untuk bergabung dengan grup diskusi!</div>';
     return;
   }
 
   box.innerHTML = uniqueGroups.map(g => {
-    const sizeText = g.size === 'solo' ? (g.totalMembers || 0).toLocaleString() + ' anggota' : 'Grup ' + g.size + ' orang';
+    const sizeText = (g.totalMembers || 0).toLocaleString() + ' anggota';
     const statusBadge = g.status === 'active' ? 'success' : 'danger';
     const statusText = g.status === 'active' ? '🟢 Aktif' : '🔴 Ditutup';
     return `<div class="card">
       <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:10px">
         <div>
           <h3>${g.eventName || 'Konser'}</h3>
-          <div style="color:#94a3b8;font-size:13px">${sizeText}</div>
+          <div style="color:#94a3b8;font-size:13px">${sizeText} • Grup Diskusi Resmi</div>
         </div>
         <span class="badge ${statusBadge}">${statusText}</span>
       </div>
       <div style="margin-top:12px">
-        <button class="btn" onclick="openGroup('${g.id}')">💬 Buka Chat</button>
+        <button class="btn" onclick="openGroup('${g.id}')">💬 Buka Chat Grup</button>
       </div>
     </div>`;
   }).join('');
 }
 
 function openGroup(groupId){
-  console.log("Mencoba membuka grup ID:", groupId);
-  
   const group = state.groups.find(g => g.id == groupId);
-  
   if (!group) {
-    showToast("⚠️ Grup tidak ditemukan di sistem!", "warn");
-    console.error("Gagal menemukan grup dengan ID:", groupId);
+    showToast("⚠️ Grup tidak ditemukan!", "warn");
     return;
   }
-
-  // Sinkronisasi: Pastikan currentTicket juga terisi agar chat tidak error
-  const ticket = state.tickets.find(t => t.id == group.ticketId);
-  if (ticket) {
-    state.currentTicket = ticket;
-  } else {
-    console.warn("Tiket untuk grup ini tidak ditemukan di state.tickets");
-  }
-
+  
   state.currentGroup = group;
+  
+  // Sinkronisasi tiket user untuk konser ini (agar fitur rating dll tetap jalan)
+  const safeTickets = Array.isArray(state.tickets) ? state.tickets : [];
+  state.currentTicket = safeTickets.find(t => t.event && t.event.id == group.eventId) || state.currentTicket;
 
-  if (group.size === 'solo') {
-    showSoloChat();
-  } else {
-    showPartnerChat();
-  }
+  // Buka chat (pakai UI chat besar)
+  showSoloChat();
 }
 
 // ==========================================
