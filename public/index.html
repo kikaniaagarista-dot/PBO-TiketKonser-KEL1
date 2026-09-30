@@ -6,21 +6,14 @@
 <title>KonserKu - Pemesanan Tiket Konser</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- TAMBAHKAN INI -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script type="text/javascript">
-  (function(){
-    emailjs.init({ publicKey: "wiGT05-lU70klmshz" });
-  })();
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+(function(){ emailjs.init({ publicKey: "wiGT05-lU70klmshz" }); })();
 </script>
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
 .container{max-width:1200px;margin:0 auto;padding:20px}
-
-/* Login Page */
 .login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#0f172a,#1e293b);display:flex;align-items:center;justify-content:center;z-index:9999}
 .login-box{background:#1e293b;padding:40px;border-radius:20px;max-width:450px;width:90%;border:1px solid #334155;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .login-box h1{text-align:center;color:#8b5cf6;margin-bottom:10px;font-size:32px}
@@ -34,80 +27,55 @@ body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-heig
 .social-login{margin-top:20px;padding-top:20px;border-top:1px solid #334155}
 .social-login p{text-align:center;color:#94a3b8;font-size:13px;margin-bottom:15px}
 .social-btn{width:100%;padding:12px;background:#fff;color:#333;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px}
-.social-btn.google{background:#fff;color:#333}
-.social-btn.google:hover{background:#f1f1f1}
 .login-error{background:rgba(239,68,68,.15);color:#ef4444;padding:10px;border-radius:8px;margin-bottom:15px;font-size:13px;display:none}
 .login-error.show{display:block}
-.login-lock{background:rgba(245,158,11,.15);color:#f59e0b;padding:10px;border-radius:8px;margin-bottom:15px;font-size:13px;display:none}
-.login-lock.show{display:block}
-
-/* Navbar */
-.navbar{background:#1e293b;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #8b5cf6;position:sticky;top:0;z-index:100}
+.navbar{background:#1e293b;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #8b5cf6;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
 .logo{font-size:24px;font-weight:bold;color:#8b5cf6;cursor:pointer}
 .nav-links{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .nav-btn{background:transparent;border:none;color:#cbd5e1;padding:10px 16px;cursor:pointer;border-radius:8px;font-size:14px;font-weight:500}
 .nav-btn:hover,.nav-btn.active{background:#8b5cf6;color:white}
 .user-badge{background:#8b5cf6;color:white;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:bold;cursor:pointer}
-.user-badge:hover{background:#7c3aed}
-
-/* Pages */
 .page{display:none;animation:fadeIn .4s}
 .page.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
-/* Hero */
 .hero{background:linear-gradient(135deg,#8b5cf6,#06b6d4);padding:50px 30px;border-radius:20px;margin:20px 0;text-align:center}
 .hero h1{font-size:42px;margin-bottom:10px}
 .hero p{font-size:16px;opacity:.9}
-
-/* Search */
 .search-bar{background:#1e293b;padding:15px;border-radius:12px;margin:20px 0;display:flex;gap:10px;flex-wrap:wrap}
 .search-bar input,.search-bar select{padding:10px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:white;flex:1;min-width:150px}
 .search-bar button{background:#8b5cf6;color:white;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-weight:bold}
-
-/* Event Grid */
 .event-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin:20px 0}
 .event-card{background:#1e293b;border-radius:12px;overflow:hidden;cursor:pointer;transition:.3s;border:1px solid #334155}
 .event-card:hover{transform:translateY(-4px);border-color:#8b5cf6}
 .event-img{height:160px;background-size:cover;background-position:center;position:relative}
 .event-badge{position:absolute;top:10px;left:10px;background:#ef4444;color:white;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:bold}
 .event-badge.early{background:#10b981}
-.event-badge.cancelled{background:#6b7280}
 .event-info{padding:15px}
 .event-info h3{color:#fbbf24;margin-bottom:8px}
 .event-meta{color:#94a3b8;font-size:13px;margin-bottom:10px}
 .event-price{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
 .price{font-size:18px;font-weight:bold;color:#10b981}
-
-/* Buttons */
 .btn{background:#8b5cf6;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:14px;transition:.2s}
 .btn:hover{background:#7c3aed}
 .btn.full{width:100%;padding:14px;font-size:15px}
 .btn.success{background:#10b981}
 .btn.success:hover{background:#059669}
 .btn.danger{background:#ef4444}
-.btn.danger:hover{background:#dc2626}
 .btn.ghost{background:transparent;border:1px solid #475569;color:#cbd5e1}
 .btn.ghost:hover{background:#334155}
 .btn.warning{background:#f59e0b;color:#0f172a}
-
-/* Cards */
 .card{background:#1e293b;padding:20px;border-radius:12px;margin-bottom:15px;border:1px solid #334155}
 .card h3{color:#38bdf8;margin-bottom:15px}
 .info-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #334155}
 .info-row:last-child{border:none}
 .info-row .label{color:#94a3b8}
 .info-row .value{font-weight:bold}
-
-/* Detail */
 .detail-header{height:280px;background-size:cover;background-position:center;border-radius:20px;position:relative;margin-bottom:20px}
 .detail-header::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,#0f172a,transparent);border-radius:20px}
 .detail-info{position:absolute;bottom:20px;left:25px;z-index:2}
 .detail-info h1{font-size:32px;margin-bottom:8px}
 .detail-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}
 @media(max-width:900px){.detail-grid{grid-template-columns:1fr}}
-
-/* Seat */
 .stage{background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:white;text-align:center;padding:14px;border-radius:12px 12px 50% 50%/12px 12px 30px 30px;margin:20px auto;max-width:400px;font-weight:bold;letter-spacing:3px}
 .seat-map{display:grid;gap:8px;justify-content:center;margin:20px 0}
 .seat{width:34px;height:34px;border-radius:6px;background:#334155;border:1px solid #475569;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold}
@@ -122,12 +90,8 @@ body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-heig
 .seat-dot.sel{background:#8b5cf6}
 .seat-dot.hold{background:#f59e0b;opacity:.5}
 .seat-dot.taken{background:#ef4444;opacity:.3}
-
-/* Timer */
 .timer{background:linear-gradient(135deg,#f59e0b,#f97316);color:white;padding:12px 20px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-weight:bold}
 .timer .time{font-size:20px;font-weight:bold;font-family:monospace}
-
-/* Checkout */
 .checkout-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}
 @media(max-width:900px){.checkout-grid{grid-template-columns:1fr}}
 .form-group{margin-bottom:14px}
@@ -141,8 +105,6 @@ body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-heig
 .pay-method .icon{font-size:22px;margin-bottom:5px}
 .summary-row{display:flex;justify-content:space-between;padding:10px 0;font-size:14px}
 .summary-row.total{border-top:1px solid #334155;margin-top:10px;padding-top:14px;font-size:18px;font-weight:bold}
-
-/* QRIS */
 .qris-container{max-width:500px;margin:0 auto}
 .qris-box{background:white;padding:20px;border-radius:12px;display:inline-block;margin:15px 0}
 .qris-detail{background:#1e293b;padding:20px;border-radius:12px;margin:15px 0;border:1px solid #334155}
@@ -155,23 +117,14 @@ body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-heig
 .status-badge.success{background:rgba(16,185,129,.15);color:#10b981}
 .status-badge.failed{background:rgba(239,68,68,.15);color:#ef4444}
 .status-badge.cancelled{background:rgba(107,114,128,.15);color:#6b7280}
-
-/* Mode Selection */
 .mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin:20px 0}
 .mode-card{background:#1e293b;padding:30px;border-radius:16px;text-align:center;cursor:pointer;border:2px solid #334155;transition:.3s}
 .mode-card:hover{border-color:#8b5cf6;transform:translateY(-3px)}
 .mode-card .icon{font-size:60px;margin-bottom:15px}
 .mode-card h3{color:#fbbf24;margin-bottom:10px;font-size:20px}
 .mode-card p{color:#94a3b8;font-size:14px}
-
-/* Partner Form */
-.partner-form{background:#1e293b;padding:25px;border-radius:12px;margin:15px 0;border:1px solid #334155}
-.partner-card{background:#0f172a;padding:15px;border-radius:10px;margin:10px 0;border:1px solid #334155}
-.partner-card h4{color:#38bdf8;margin-bottom:10px}
-
-/* Chat Room */
 .chat-container{background:#1e293b;border-radius:12px;overflow:hidden;border:1px solid #334155;height:600px;display:flex;flex-direction:column}
-.chat-header{background:#334155;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
+.chat-header{background:#334155;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .chat-header h3{color:white}
 .chat-header .info{color:#94a3b8;font-size:12px}
 .chat-messages{flex:1;overflow-y:auto;padding:15px;background:#0f172a}
@@ -188,113 +141,50 @@ body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-heig
 .chat-input-area{padding:15px;background:#1e293b;border-top:1px solid #334155;display:flex;gap:10px}
 .chat-input-area input{flex:1;padding:11px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:white}
 .chat-input-area button{background:#8b5cf6;color:white;border:none;padding:11px 20px;border-radius:8px;cursor:pointer;font-weight:bold}
-
-/* Warning Panel */
-.warning-panel{background:#1e293b;padding:20px;border-radius:12px;margin:15px 0;border:1px solid #334155}
-.warning-btn{display:block;width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:14px}
-.warning-btn.disaster{background:#f59e0b;color:#0f172a}
-.warning-btn.riot{background:#ef4444;color:white}
-.warning-btn.medical{background:#06b6d4;color:#0f172a}
-
-/* Rating */
 .rating-stars{display:flex;gap:5px;font-size:30px;cursor:pointer}
 .rating-stars span{color:#475569;transition:.2s}
 .rating-stars span.active{color:#fbbf24}
-.rating-stars span:hover{color:#fbbf24}
-.rating-summary{background:#1e293b;padding:20px;border-radius:12px;margin:15px 0}
-.rating-big{font-size:48px;font-weight:bold;color:#fbbf24}
-.rating-bar{display:flex;align-items:center;gap:10px;margin:5px 0}
-.rating-bar .bar{flex:1;height:8px;background:#334155;border-radius:4px;overflow:hidden}
-.rating-bar .fill{height:100%;background:#fbbf24}
-
-/* Modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
 .modal.show{display:flex}
-.modal-box{background:#1e293b;padding:30px;border-radius:15px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto}
+.modal-box{background:#1e293b;padding:30px;border-radius:15px;max-width:500px;width:90%;max-height:85vh;overflow-y:auto}
 .modal-box h2{color:#38bdf8;margin-bottom:15px}
-
-/* Queue */
-.queue-overlay{position:fixed;inset:0;background:rgba(15,23,42,.95);display:none;align-items:center;justify-content:center;z-index:2000}
-.queue-overlay.show{display:flex}
-.queue-box{background:#1e293b;padding:40px;border-radius:20px;text-align:center;max-width:400px}
-.queue-num{font-size:64px;font-weight:bold;color:#06b6d4;margin:15px 0}
-.spinner{width:60px;height:60px;border:4px solid #475569;border-top-color:#8b5cf6;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Toast */
 .toast{position:fixed;bottom:20px;right:20px;background:#1e293b;border:1px solid #334155;padding:14px 20px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.5);transform:translateX(400px);transition:.3s;z-index:3000;max-width:350px}
 .toast.show{transform:translateX(0)}
 .toast.success{border-left:4px solid #10b981}
 .toast.warn{border-left:4px solid #f59e0b}
 .toast.error{border-left:4px solid #ef4444}
 .toast.info{border-left:4px solid #06b6d4}
-
-/* Table */
 table{width:100%;border-collapse:collapse}
 th,td{padding:12px;text-align:left;border-bottom:1px solid #334155;font-size:13px}
 th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
-
-/* Badge */
 .badge{display:inline-block;padding:4px 10px;border-radius:15px;font-size:11px;font-weight:bold}
 .badge.success{background:rgba(16,185,129,.15);color:#10b981}
 .badge.warn{background:rgba(245,158,11,.15);color:#f59e0b}
 .badge.danger{background:rgba(239,68,68,.15);color:#ef4444}
 .badge.info{background:rgba(6,182,212,.15);color:#06b6d4}
 .badge.cancelled{background:rgba(107,114,128,.15);color:#6b7280}
-
-/* Section */
 .section-title{font-size:24px;font-weight:bold;margin:25px 0 15px;color:#38bdf8}
-
-/* Ticket */
-.ticket{background:linear-gradient(135deg,#1e293b,#334155);border:1px solid #475569;border-radius:15px;padding:25px;max-width:500px;margin:20px auto;position:relative}
+.ticket{background:linear-gradient(135deg,#1e293b,#334155);border:1px solid #475569;border-radius:15px;padding:25px;max-width:500px;margin:20px auto}
 .ticket-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:15px}
 .ticket-title{font-size:20px;font-weight:bold}
 .ticket-cat{background:#8b5cf6;color:white;padding:4px 12px;border-radius:15px;font-size:12px;font-weight:bold}
 .ticket-divider{border-top:2px dashed #475569;margin:15px 0}
 .qr-wrap{display:flex;justify-content:center;padding:15px;background:white;border-radius:10px;margin:15px 0}
 .ticket-id{font-family:monospace;text-align:center;color:#94a3b8;font-size:13px;letter-spacing:2px}
-
-/* Closed Chat */
-.chat-closed{background:#1e293b;padding:40px;border-radius:12px;text-align:center;border:1px solid #334155}
-.chat-closed .icon{font-size:60px;margin-bottom:15px}
-.chat-closed h3{color:#fbbf24;margin-bottom:10px}
-.chat-closed p{color:#94a3b8}
-
-/* Stat */
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px}
 .stat-card{background:#1e293b;padding:20px;border-radius:12px;border:1px solid #334155}
 .stat-card .label{color:#94a3b8;font-size:13px;margin-bottom:8px}
 .stat-card .value{font-size:28px;font-weight:bold;color:#10b981}
-
-/* Tabs */
 .tabs{display:flex;gap:5px;margin-bottom:20px;border-bottom:1px solid #334155;flex-wrap:wrap}
 .tab{padding:12px 20px;cursor:pointer;color:#94a3b8;border-bottom:2px solid transparent;font-weight:500}
 .tab.active{color:#8b5cf6;border-bottom-color:#8b5cf6}
-
-/* Partner List */
-.partner-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:15px 0}
 .partner-item{background:#0f172a;padding:12px;border-radius:8px;border:1px solid #334155;text-align:center}
 .partner-item .av{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#06b6d4);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:20px;font-weight:bold}
 .partner-item .name{font-weight:bold;color:#fbbf24}
 .partner-item .desc{color:#94a3b8;font-size:12px;margin-top:5px}
-
-/* Group Info */
-.group-info{background:linear-gradient(135deg,#8b5cf6,#06b6d4);padding:20px;border-radius:12px;margin-bottom:15px}
-.group-info h2{color:white;margin-bottom:5px}
-.group-info p{color:rgba(255,255,255,.9);font-size:14px}
-
-/* Countdown */
-.countdown{background:#1e293b;padding:15px;border-radius:10px;text-align:center;margin:15px 0;border:1px solid #334155}
-.countdown .time{font-size:32px;font-weight:bold;color:#f59e0b;font-family:monospace}
-.countdown .label{color:#94a3b8;font-size:13px}
-
-/* Admin Event Actions */
+.partner-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:15px 0}
 .event-actions{display:flex;gap:8px;flex-wrap:wrap}
 .event-actions button{padding:6px 12px;font-size:12px;border-radius:6px}
-
-/* Profile Modal */
-.profile-form{background:#1e293b;padding:25px;border-radius:12px;margin:15px 0}
-.profile-form h3{color:#38bdf8;margin-bottom:15px}
 </style>
 </head>
 <body>
@@ -304,10 +194,7 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
   <div class="login-box">
     <h1>🎵 KonserKu</h1>
     <p class="subtitle">Masuk untuk memesan tiket konser impian Anda</p>
-    
     <div class="login-error" id="loginError"></div>
-    <div class="login-lock" id="loginLock"></div>
-    
     <div class="form-group">
       <label>📧 Email</label>
       <input type="email" id="loginEmail" placeholder="nama@email.com" />
@@ -316,20 +203,12 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
       <label>🔒 Password</label>
       <input type="password" id="loginPassword" placeholder="Masukkan password" />
     </div>
-    
     <button class="login-btn" onclick="handleLogin()">Masuk</button>
-    
     <div class="social-login">
       <p>atau masuk dengan</p>
-      <button class="social-btn google" onclick="handleGoogleLogin()">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Masuk dengan Google
-      </button>
+      <button class="social-btn" onclick="handleGoogleLogin()"> Masuk dengan Google</button>
     </div>
-    
-    <p style="text-align:center;margin-top:20px;color:#94a3b8;font-size:12px">
-      Dengan masuk, Anda menyetujui Syarat & Ketentuan KonserKu
-    </p>
+    <p style="text-align:center;margin-top:20px;color:#94a3b8;font-size:12px">Dengan masuk, Anda menyetujui Syarat & Ketentuan KonserKu</p>
   </div>
 </div>
 
@@ -342,9 +221,8 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
     <button class="nav-btn" data-page="tickets" onclick="showPage('tickets')">Tiket Saya</button>
     <button class="nav-btn" data-page="groups" onclick="showPage('groups')">Grup Konser</button>
     <button class="nav-btn" data-page="admin" onclick="handleAdminAccess()">Admin</button>
-    <div class="user-badge" id="userBadge" onclick="openProfileModal()"> <span id="userName">Andi</span></div>
-    <div class="user-badge" id="userBadge" onclick="openProfileModal()"> <span id="userName">Andi</span></div>
-    <button class="nav-btn" onclick="handleLogout()" style="color:#ef4444;font-weight:bold;">🚪 Logout</button>
+    <div class="user-badge" id="userBadge" onclick="openProfileModal()"><span id="userName">User</span></div>
+    <button class="nav-btn" onclick="handleLogout()" style="color:#ef4444;font-weight:bold">🚪 Logout</button>
   </div>
 </nav>
 
@@ -400,7 +278,7 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
 <!-- SEATS -->
 <div class="page" id="page-seats">
   <button class="btn ghost" onclick="showPage('detail')" style="margin-bottom:20px">← Kembali</button>
-  <h2 class="section-title"> Pilih Kursi / Kategori</h2>
+  <h2 class="section-title">🪑 Pilih Kursi / Kategori</h2>
   <div class="detail-grid">
     <div>
       <div class="card">
@@ -420,10 +298,7 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
         <h3>🛒 Pesanan Anda</h3>
         <div id="seatSummary" style="color:#94a3b8;padding:20px 0;text-align:center">Belum ada kursi dipilih</div>
         <div id="holdTimerBox" style="display:none">
-          <div class="timer">
-            <span>⏱️ Tiket ditahan:</span>
-            <span class="time" id="holdTime">10:00</span>
-          </div>
+          <div class="timer"><span>⏱️ Tiket ditahan:</span><span class="time" id="holdTime">10:00</span></div>
         </div>
         <button class="btn full" id="btnToCheckout" onclick="goToCheckout()" disabled>Lanjut ke Checkout</button>
       </div>
@@ -439,9 +314,9 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
     <div>
       <div class="card">
         <h3>👤 Data Pembeli</h3>
-        <div class="form-group"><label>Nama Lengkap</label><input type="text" id="buyerName" value="Andi Pratama" /></div>
-        <div class="form-group"><label>Email</label><input type="email" id="buyerEmail" value="andi@email.com" /></div>
-        <div class="form-group"><label>No. HP (WhatsApp)</label><input type="tel" id="buyerPhone" value="081234567890" /></div>
+        <div class="form-group"><label>Nama Lengkap</label><input type="text" id="buyerName" /></div>
+        <div class="form-group"><label>Email</label><input type="email" id="buyerEmail" /></div>
+        <div class="form-group"><label>No. HP (WhatsApp)</label><input type="tel" id="buyerPhone" /></div>
         <div class="form-group">
           <label>🎟️ Kode Promo</label>
           <div style="display:flex;gap:10px">
@@ -454,18 +329,14 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
       <div class="card">
         <h3>💳 Metode Pembayaran</h3>
         <div class="payment-methods">
-            <div class="pay-method selected" data-method="qris" onclick="selectPay(this)">
-                <div class="icon">📱</div>QRIS
-            </div>
-            <div class="pay-method" data-method="bank" onclick="selectPay(this)">
-                <div class="icon">🏦</div>Transfer Bank
-            </div>
+          <div class="pay-method selected" data-method="qris" onclick="selectPay(this)"><div class="icon">📱</div>QRIS</div>
+          <div class="pay-method" data-method="bank" onclick="selectPay(this)"><div class="icon">🏦</div>Transfer Bank</div>
         </div>
       </div>
     </div>
     <div>
       <div class="card">
-        <h3> Ringkasan Pesanan</h3>
+        <h3>📋 Ringkasan Pesanan</h3>
         <div id="checkoutSummary"></div>
         <div class="summary-row total"><span>Total</span><span id="checkoutTotal">Rp 0</span></div>
         <button class="btn full success" style="margin-top:15px" onclick="processPayment()">🔒 Bayar Sekarang</button>
@@ -474,7 +345,7 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
   </div>
 </div>
 
-<!-- QRIS PAYMENT -->
+<!-- QRIS -->
 <div class="page" id="page-qris">
   <div class="qris-container">
     <div class="card" style="text-align:center">
@@ -487,170 +358,104 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
         <div class="row"><span class="label">Nama Pembeli</span><span class="value" id="qrisBuyer">-</span></div>
         <div class="row"><span class="label">Event</span><span class="value" id="qrisEvent">-</span></div>
         <div class="row"><span class="label">Nominal</span><span class="value" id="qrisAmount" style="color:#10b981;font-size:18px">-</span></div>
-        <div class="row"><span class="label">Status</span><span class="value" id="qrisStatus"><span class="status-badge pending">⏳ Menunggu Pembayaran</span></span></div>
+        <div class="row"><span class="label">Status</span><span class="value" id="qrisStatus"><span class="status-badge pending">⏳ Menunggu</span></span></div>
       </div>
-      <div class="timer">
-        <span>⏱️ Selesaikan dalam:</span>
-        <span class="time" id="payTime">10:00</span>
-      </div>
+      <div class="timer"><span>⏱️ Selesaikan dalam:</span><span class="time" id="payTime">10:00</span></div>
       <button class="btn full success" onclick="simulatePaid()">✅ Simulasi: Pembayaran Berhasil</button>
-      <button class="btn ghost full" style="margin-top:10px" onclick="showPage('checkout')">← Kembali ke Checkout</button>
-    </div>
-  </div>
-</div>
-
-<!-- BANK PAYMENT PAGE -->
-<div class="page" id="page-bank">
-  <div class="qris-container">
-    <div class="card">
-      <h3>🏦 Instruksi Transfer Bank</h3>
-      <p style="color:#94a3b8;margin-bottom:15px">Lakukan transfer ke Virtual Account berikut sebelum waktu habis.</p>
-      
-      <div class="qris-detail">
-        <div class="row"><span class="label">Bank</span><span class="value">BANK BCA (Simulasi)</span></div>
-        <div class="row"><span class="label">No. Virtual Account</span><span class="value" id="bankVANumber" style="font-family:monospace;font-size:18px;color:#fbbf24">-</span></div>
-        <div class="row"><span class="label">Nama Penerima</span><span class="value">PT KONSERKU INDONESIA</span></div>
-        <div class="row"><span class="label">Nominal Transfer</span><span class="value" id="bankAmount" style="color:#10b981;font-size:18px">-</span></div>
-        <div class="row"><span class="label">Batas Waktu</span><span class="value" id="bankExpiry">-</span></div>
-      </div>
-
-      <div class="form-group" style="margin-top:20px">
-        <label>📤 Upload Bukti Transfer</label>
-        <input type="file" id="bankProof" accept="image/*" style="padding:10px" />
-      </div>
-
-      <button class="btn full success" onclick="confirmBankTransfer()">✅ Saya Sudah Transfer & Upload Bukti</button>
       <button class="btn ghost full" style="margin-top:10px" onclick="showPage('checkout')">← Kembali</button>
     </div>
   </div>
 </div>
 
-<!-- MODE SELECTION -->
-<div class="page" id="page-mode">
-  <div style="text-align:center;max-width:700px;margin:0 auto">
-    <div class="badge success" style="padding:8px 20px;font-size:14px;margin-bottom:20px">✅ Pembayaran Berhasil! Tiket Terbit!</div>
-    <h2 class="section-title" style="margin-top:0">🎉 Pilih Mode Menonton Konser</h2>
-    <p style="color:#94a3b8;margin-bottom:30px">Bagaimana Anda ingin menikmati konser ini?</p>
-    <div class="mode-grid">
-      <div class="mode-card" onclick="selectMode('solo')">
-        <div class="icon">🎭</div>
-        <h3>Solo</h3>
-        <p>Nikmati konser sendirian dan bergabung dengan grup diskusi besar (1000-5000 penonton)</p>
-        <button class="btn full" style="margin-top:15px">Pilih Solo</button>
+<!-- BANK -->
+<div class="page" id="page-bank">
+  <div class="qris-container">
+    <div class="card">
+      <h3>🏦 Instruksi Transfer Bank</h3>
+      <p style="color:#94a3b8;margin-bottom:15px">Lakukan transfer ke Virtual Account berikut.</p>
+      <div class="qris-detail">
+        <div class="row"><span class="label">Bank</span><span class="value">BANK BCA (Simulasi)</span></div>
+        <div class="row"><span class="label">No. Virtual Account</span><span class="value" id="bankVANumber" style="font-family:monospace;font-size:18px;color:#fbbf24">-</span></div>
+        <div class="row"><span class="label">Nama Penerima</span><span class="value">PT KONSERKU INDONESIA</span></div>
+        <div class="row"><span class="label">Nominal</span><span class="value" id="bankAmount" style="color:#10b981;font-size:18px">-</span></div>
       </div>
-      <div class="mode-card" onclick="selectMode('partner')">
-        <div class="icon">👥</div>
-        <h3>Cari Partner Nonton</h3>
-        <p>Temukan teman menonton dan buat grup kecil untuk pengalaman yang lebih intim</p>
-        <button class="btn full" style="margin-top:15px">Cari Partner</button>
+      <div class="form-group" style="margin-top:20px">
+        <label>📤 Upload Bukti Transfer</label>
+        <input type="file" id="bankProof" accept="image/*" style="padding:10px" />
       </div>
+      <button class="btn full success" onclick="confirmBankTransfer()">✅ Saya Sudah Transfer</button>
+      <button class="btn ghost full" style="margin-top:10px" onclick="showPage('checkout')">← Kembali</button>
     </div>
-    <button class="btn ghost" onclick="showPage('tickets')" style="margin-top:20px"> Lihat Tiket Saya</button>
   </div>
 </div>
 
-<!-- PARTNER SELECTION -->
+<!-- MODE -->
+<div class="page" id="page-mode">
+  <div style="text-align:center;max-width:700px;margin:0 auto">
+    <div class="badge success" style="padding:8px 20px;font-size:14px;margin-bottom:20px">✅ Pembayaran Berhasil!</div>
+    <h2 class="section-title" style="margin-top:0">🎉 Pilih Mode Menonton</h2>
+    <div class="mode-grid">
+      <div class="mode-card" onclick="selectMode('solo')">
+        <div class="icon">🎭</div><h3>Solo</h3>
+        <p>Nikmati konser dan bergabung dengan grup diskusi besar</p>
+        <button class="btn full" style="margin-top:15px">Pilih Solo</button>
+      </div>
+      <div class="mode-card" onclick="selectMode('partner')">
+        <div class="icon">👥</div><h3>Cari Partner</h3>
+        <p>Temukan teman menonton untuk pengalaman lebih intim</p>
+        <button class="btn full" style="margin-top:15px">Cari Partner</button>
+      </div>
+    </div>
+    <button class="btn ghost" onclick="showPage('tickets')" style="margin-top:20px">Lihat Tiket Saya</button>
+  </div>
+</div>
+
+<!-- PARTNER -->
 <div class="page" id="page-partner">
   <button class="btn ghost" onclick="showPage('mode')" style="margin-bottom:20px">← Kembali</button>
   <div style="max-width:700px;margin:0 auto">
     <h2 class="section-title" style="margin-top:0">👥 Pilih Jumlah Partner</h2>
     <div class="mode-grid">
-      <div class="mode-card" onclick="selectPartnerCount(2)">
-        <div class="icon">👫</div>
-        <h3>Duo</h3>
-        <p>2 orang (Anda + 1 partner)</p>
-      </div>
-      <div class="mode-card" onclick="selectPartnerCount(3)">
-        <div class="icon">👨‍👩‍👦</div>
-        <h3>Ber-3</h3>
-        <p>3 orang (Anda + 2 partner)</p>
-      </div>
-      <div class="mode-card" onclick="selectPartnerCount(6)">
-        <div class="icon">🎉</div>
-        <h3>Ber-ramean</h3>
-        <p>4-6 orang (Anda + 3-5 partner)</p>
-      </div>
-      <div class="mode-card" onclick="selectPartnerCount('custom')">
-        <div class="icon">✉️</div>
-        <h3>Undang Teman</h3>
-        <p>Input nama partner/teman konser yang Anda kenal</p>
-      </div>
+      <div class="mode-card" onclick="selectPartnerCount(2)"><div class="icon">👫</div><h3>Duo</h3><p>2 orang</p></div>
+      <div class="mode-card" onclick="selectPartnerCount(3)"><div class="icon">👨‍👩‍👦</div><h3>Ber-3</h3><p>3 orang</p></div>
+      <div class="mode-card" onclick="selectPartnerCount(6)"><div class="icon">🎉</div><h3>Ber-ramean</h3><p>4-6 orang</p></div>
+      <div class="mode-card" onclick="selectPartnerCount('custom')"><div class="icon">✉️</div><h3>Undang Teman</h3><p>Input nama teman</p></div>
     </div>
     <div id="partnerFormContainer"></div>
   </div>
 </div>
 
-<!-- PARTNER CHAT ROOM -->
+<!-- PARTNER CHAT -->
 <div class="page" id="page-partner-chat">
-  <div id="partnerChatHeader"></div>
   <div class="chat-container" style="height:700px">
     <div class="chat-header">
-      <div>
-        <h3 id="partnerChatTitle"> Grup Partner</h3>
-        <div class="info" id="partnerChatInfo">-</div>
-      </div>
-      <div>
-        <button class="btn ghost" onclick="leavePartnerChat()" style="padding:6px 12px;font-size:12px">⬅️ Kembali</button>
-        <button class="btn danger" onclick="leaveCurrentGroup()" style="padding:6px 12px;font-size:12px">🚪 Keluar Grup</button>
-      </div>
+      <div><h3 id="partnerChatTitle">Grup Partner</h3><div class="info" id="partnerChatInfo">-</div></div>
+      <button class="btn ghost" onclick="showPage('tickets')" style="padding:6px 12px;font-size:12px">⬅️ Kembali</button>
     </div>
     <div class="chat-messages" id="partnerChatMessages"></div>
-    <div class="chat-input-area" id="partnerChatInput">
+    <div class="chat-input-area">
       <input type="text" id="partnerChatText" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter')sendPartnerChat()" />
       <button onclick="sendPartnerChat()">Kirim</button>
     </div>
   </div>
-  <div id="partnerActions" style="margin-top:15px"></div>
 </div>
 
-<!-- SOLO CHAT ROOM -->
+<!-- SOLO CHAT -->
 <div class="page" id="page-solo-chat">
-  <div id="soloChatHeader"></div>
   <div class="chat-container" style="height:700px">
     <div class="chat-header">
-      <div>
-        <h3 id="soloChatTitle">💬 Grup Diskusi Konser</h3>
-        <div class="info" id="soloChatInfo">-</div>
-      </div>
-      <div>
-        <button class="btn ghost" onclick="showPage('tickets')" style="padding:6px 12px;font-size:12px">⬅️ Kembali</button>
-        <button class="btn danger" onclick="leaveCurrentGroup()" style="padding:6px 12px;font-size:12px">🚪 Keluar Grup</button>
-      </div>
+      <div><h3 id="soloChatTitle">Grup Diskusi Konser</h3><div class="info" id="soloChatInfo">-</div></div>
+      <button class="btn ghost" onclick="showPage('tickets')" style="padding:6px 12px;font-size:12px">⬅️ Kembali</button>
     </div>
     <div class="chat-messages" id="soloChatMessages"></div>
-    <div class="chat-input-area" id="soloChatInput">
+    <div class="chat-input-area">
       <input type="text" id="soloChatText" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter')sendSoloChat()" />
       <button onclick="sendSoloChat()">Kirim</button>
     </div>
   </div>
-  <div id="soloRatingSection" style="margin-top:15px;display:none"></div>
 </div>
 
-<!-- RATING PAGE -->
-<div class="page" id="page-rating">
-  <div style="max-width:600px;margin:0 auto">
-    <h2 class="section-title" style="text-align:center">⭐ Rating Konser</h2>
-    <div class="card" style="text-align:center">
-      <h3 id="ratingEventName">-</h3>
-      <p style="color:#94a3b8;margin:10px 0">Bagaimana pengalaman menonton konser ini?</p>
-      <div class="rating-stars" id="ratingStars" style="justify-content:center;margin:20px 0">
-        <span onclick="setRating(1)">★</span>
-        <span onclick="setRating(2)">★</span>
-        <span onclick="setRating(3)">★</span>
-        <span onclick="setRating(4)">★</span>
-        <span onclick="setRating(5)">★</span>
-      </div>
-      <div class="form-group" style="text-align:left">
-        <label>Komentar / Deskripsi Pengalaman</label>
-        <textarea id="ratingComment" rows="4" placeholder="Ceritakan pengalaman Anda menonton konser ini..."></textarea>
-      </div>
-      <button class="btn full success" onclick="submitRating()">Kirim Rating</button>
-    </div>
-    <div id="ratingSummary" class="rating-summary"></div>
-  </div>
-</div>
-
-<!-- MY TICKETS -->
+<!-- TICKETS -->
 <div class="page" id="page-tickets">
   <h2 class="section-title">🎟️ Tiket Saya</h2>
   <div id="myTicketsList"></div>
@@ -658,23 +463,20 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
 
 <!-- GROUPS -->
 <div class="page" id="page-groups">
-  <h2 class="section-title"> Grup Diskusi Konser Saya</h2>
+  <h2 class="section-title">💬 Grup Diskusi Saya</h2>
   <div id="myGroupsList"></div>
 </div>
 
 <!-- ADMIN -->
 <div class="page" id="page-admin">
   <h2 class="section-title">🎛️ Dashboard Admin</h2>
-<div class="tabs">
-  <div class="tab active" onclick="showAdminTab('stats')">📊 Statistik</div>
-  <div class="tab" onclick="showAdminTab('transactions')">💳 Riwayat Transaksi</div>
-  <div class="tab" onclick="showAdminTab('events')">🎤 Manajemen Event</div>
-  <div class="tab" onclick="showAdminTab('tickets')">🎫 Manajemen Tiket</div>
-  <div class="tab" onclick="showAdminTab('bank-verify')">🏦 Verifikasi Bank</div>
-  <div class="tab" onclick="showAdminTab('groups')">👥 Pengawasan Grup</div>
-  <div class="tab" onclick="showAdminTab('warnings')">⚠️ Kirim Peringatan</div>
-</div>
-
+  <div class="tabs">
+    <div class="tab active" onclick="showAdminTab('stats',this)">📊 Statistik</div>
+    <div class="tab" onclick="showAdminTab('transactions',this)">💳 Transaksi</div>
+    <div class="tab" onclick="showAdminTab('events',this)">🎤 Event</div>
+    <div class="tab" onclick="showAdminTab('tickets',this)">🎫 Tiket</div>
+    <div class="tab" onclick="showAdminTab('groups',this)">👥 Grup</div>
+  </div>
   <div id="adminTab-stats">
     <div class="stat-grid">
       <div class="stat-card"><div class="label">Total Tiket Terjual</div><div class="value" id="statTickets">0</div></div>
@@ -683,108 +485,28 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
       <div class="stat-card"><div class="label">Grup Aktif</div><div class="value" id="statGroups">0</div></div>
     </div>
   </div>
-  
   <div id="adminTab-transactions" style="display:none">
     <div class="card">
-      <h3>💳 Riwayat Transaksi QRIS</h3>
-      <table>
-        <thead><tr><th>ID Transaksi</th><th>Pembeli</th><th>Event</th><th>Nominal</th><th>Status</th><th>Waktu</th></tr></thead>
-        <tbody id="transactionTable"></tbody>
-      </table>
+      <h3>💳 Riwayat Transaksi</h3>
+      <table><thead><tr><th>ID</th><th>Pembeli</th><th>Event</th><th>Nominal</th><th>Status</th></tr></thead><tbody id="transactionTable"></tbody></table>
     </div>
   </div>
-  
-<div id="adminTab-events" style="display:none">
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+  <div id="adminTab-events" style="display:none">
+    <div class="card">
       <h3>🎤 Manajemen Event</h3>
-      <button class="btn" onclick="document.getElementById('addEventModal').classList.add('show')">+ Buat Event Baru</button>
-    </div>
-    <table>
-      <thead><tr><th>Event</th><th>Tanggal</th><th>Terjual</th><th>Status</th><th>Aksi</th></tr></thead>
-      <tbody id="adminEventTable"></tbody>
-    </table>
-  </div>
-  
-  <!-- FITUR BARU: Kontrol Tiket Per Event -->
-  <div class="card" style="margin-top:20px">
-    <h3>🎫 Kontrol Tiket Penonton</h3>
-    <p style="color:#94a3b8;margin-bottom:15px">Admin dapat membatalkan tiket penonton secara paksa (misal: penipuan atau pelanggaran).</p>
-    <table>
-      <thead><tr><th>ID Tiket</th><th>Pembeli</th><th>Event</th><th>Status</th><th>Aksi Admin</th></tr></thead>
-      <tbody id="adminTicketControlTable"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- Modal Tambah Event -->
-<div class="modal" id="addEventModal">
-  <div class="modal-box">
-    <h2>Tambah Event Baru</h2>
-    <div class="form-group"><label>Nama Event</label><input type="text" id="newEventName" /></div>
-    <div class="form-group"><label>Artis</label><input type="text" id="newEventArtist" /></div>
-    <div class="form-group"><label>Tanggal (YYYY-MM-DD)</label><input type="date" id="newEventDate" /></div>
-    <div class="form-group"><label>Harga Dasar</label><input type="number" id="newEventPrice" /></div>
-    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
-      <button class="btn ghost" onclick="closeModal('addEventModal')">Batal</button>
-      <button class="btn success" onclick="createNewEvent()">Simpan Event</button>
+      <table><thead><tr><th>Event</th><th>Tanggal</th><th>Terjual</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminEventTable"></tbody></table>
     </div>
   </div>
-</div>
-  
+  <div id="adminTab-tickets" style="display:none">
+    <div class="card">
+      <h3>🎫 Manajemen Tiket</h3>
+      <table><thead><tr><th>ID Tiket</th><th>Pembeli</th><th>Event</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminTicketTable"></tbody></table>
+    </div>
+  </div>
   <div id="adminTab-groups" style="display:none">
     <div class="card">
-      <h3>👥 Pengawasan Grup Konser</h3>
-      <p style="color:#94a3b8;margin-bottom:15px">Pantau dan kelola semua grup diskusi yang aktif</p>
-      <table>
-        <thead><tr><th>ID Grup</th><th>Event</th><th>Tipe</th><th>Anggota</th><th>Status</th><th>Aksi</th></tr></thead>
-        <tbody id="adminGroupTable"></tbody>
-      </table>
-    </div>
-  </div>
-  <!-- Tab Manajemen Tiket (BARU) -->
-<div id="adminTab-tickets" style="display:none">
-  <div class="card">
-    <h3>🎫 Manajemen Tiket Penonton</h3>
-    <p style="color:#94a3b8;margin-bottom:15px">Admin dapat melihat dan membatalkan tiket penonton.</p>
-    <table>
-      <thead><tr><th>ID Tiket</th><th>Pembeli</th><th>Event</th><th>Status</th><th>Aksi</th></tr></thead>
-      <tbody id="adminTicketTable"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- Tab Verifikasi Bank (BARU) -->
-<div id="adminTab-bank-verify" style="display:none">
-  <div class="card">
-    <h3>🏦 Verifikasi Pembayaran Transfer Bank</h3>
-    <p style="color:#94a3b8;margin-bottom:15px">Verifikasi bukti transfer dari pembeli sebelum menerbitkan tiket.</p>
-    <table>
-      <thead><tr><th>ID Transaksi</th><th>Pembeli</th><th>Nominal</th><th>Bukti</th><th>Status</th><th>Aksi</th></tr></thead>
-      <tbody id="adminBankVerifyTable"></tbody>
-    </table>
-  </div>
-</div>
-  <div id="adminTab-warnings" style="display:none">
-    <div class="card">
-      <h3>⚠️ Kirim Peringatan ke Grup Konser</h3>
-      <div class="form-group">
-        <label>Pilih Grup Konser</label>
-        <select id="warningGroupSelect"></select>
-      </div>
-      <div class="form-group">
-        <label>Jenis Peringatan</label>
-        <select id="warningType">
-          <option value="disaster">🌊 Peringatan Bencana</option>
-          <option value="riot">⚠️ Peringatan Kerusuhan</option>
-          <option value="medical">🏥 Peringatan Medis</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Deskripsi Peringatan</label>
-        <textarea id="warningDesc" rows="4" placeholder="Jelaskan situasi dan instruksi keselamatan..."></textarea>
-      </div>
-      <button class="btn full danger" onclick="sendWarning()">📢 Kirim Peringatan ke Semua Peserta</button>
+      <h3>👥 Semua Grup</h3>
+      <table><thead><tr><th>ID</th><th>Event</th><th>Tipe</th><th>Anggota</th><th>Status</th></tr></thead><tbody id="adminGroupTable"></tbody></table>
     </div>
   </div>
 </div>
@@ -794,24 +516,24 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
 <!-- PROFILE MODAL -->
 <div class="modal" id="profileModal">
   <div class="modal-box">
-    <h2> Profil Saya</h2>
-    <div class="profile-form">
-      <div class="form-group">
-        <label>Nama Lengkap</label>
-        <input type="text" id="profileName" />
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="profileEmail" />
-      </div>
-      <div class="form-group">
-        <label>No. HP (WhatsApp)</label>
-        <input type="tel" id="profilePhone" />
-      </div>
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
-        <button class="btn ghost" onclick="closeModal('profileModal')">Batal</button>
-        <button class="btn success" onclick="saveProfile()">💾 Simpan Perubahan</button>
-      </div>
+    <h2>👤 Profil Saya</h2>
+    <div class="form-group"><label>Nama</label><input type="text" id="profileName" /></div>
+    <div class="form-group"><label>Email</label><input type="email" id="profileEmail" /></div>
+    <div class="form-group"><label>No. HP</label><input type="tel" id="profilePhone" /></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
+      <button class="btn ghost" onclick="closeModal('profileModal')">Batal</button>
+      <button class="btn success" onclick="saveProfile()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LIHAT ANGGOTA GRUP -->
+<div class="modal" id="groupMembersModal">
+  <div class="modal-box">
+    <h2>👥 Anggota Grup</h2>
+    <div id="groupMembersList" style="max-height: 400px; overflow-y: auto; margin-top: 15px;"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:20px">
+      <button class="btn ghost" onclick="closeModal('groupMembersModal')">Tutup</button>
     </div>
   </div>
 </div>
@@ -824,158 +546,115 @@ th{color:#94a3b8;font-weight:bold;font-size:11px;text-transform:uppercase}
 // DATA KONSER
 // ==========================================
 const EVENTS = [
-  {id:1,name:"Dewa 19 Reunion Tour",artist:"Dewa 19",genre:"Rock",city:"Jakarta",venue:"Gelora Bung Karno",date:"2026-11-15",time:"19:00",price:850000,img:"https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800",desc:"Konser reuni legendaris Dewa 19.",type:"duduk",categories:[{id:'VIP',price:2500000,rows:3,seats:8},{id:'CAT 1',price:1500000,rows:4,seats:10},{id:'CAT 2',price:850000,rows:5,seats:12}],terms:"Tiket non-refundable.",status:"active"},
-  {id:2,name:"Tulus: Manusia Tour",artist:"Tulus",genre:"Pop",city:"Bandung",venue:"Trans Studio",date:"2026-10-22",time:"20:00",price:650000,img:"https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800",desc:"Tur nasional Tulus.",type:"duduk",categories:[{id:'Platinum',price:1800000,rows:3,seats:8},{id:'Gold',price:1000000,rows:4,seats:10},{id:'Silver',price:650000,rows:5,seats:12}],terms:"Bebas usia.",status:"active"},
-  {id:3,name:"Java Jazz Festival",artist:"Various",genre:"Jazz",city:"Jakarta",venue:"JIExpo",date:"2026-12-05",time:"16:00",price:1200000,img:"https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800",desc:"Festival jazz terbesar.",type:"berdiri",categories:[{id:'VIP',price:3500000,quota:200},{id:'Festival',price:1200000,quota:2000}],terms:"Tiket per kategori.",status:"active"},
-  {id:4,name:"We The Fest",artist:"Multiple",genre:"EDM",city:"Jakarta",venue:"GBK",date:"2026-11-28",time:"15:00",price:950000,img:"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800",desc:"Festival musik & seni.",type:"berdiri",categories:[{id:'Premium',price:2200000,quota:500},{id:'General',price:950000,quota:5000}],terms:"Wajib KTP 17+.",status:"active"},
-  {id:5,name:"Sheila on 7 — 25 Tahun",artist:"Sheila on 7",genre:"Pop",city:"Yogyakarta",venue:"Mandala Krida",date:"2026-12-20",time:"19:30",price:550000,img:"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800",desc:"Perayaan 25 tahun.",type:"duduk",categories:[{id:'VVIP',price:1500000,rows:2,seats:8},{id:'CAT 1',price:850000,rows:4,seats:10},{id:'CAT 2',price:550000,rows:5,seats:12}],terms:"Non-refundable.",status:"active"},
-  {id:6,name:"Payung Teduh Live",artist:"Payung Teduh",genre:"Indie",city:"Surabaya",venue:"Grand City",date:"2027-01-10",time:"20:00",price:450000,img:"https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800",desc:"Malam intim akustik.",type:"duduk",categories:[{id:'Front',price:900000,rows:3,seats:8},{id:'Middle',price:650000,rows:4,seats:10},{id:'Back',price:450000,rows:5,seats:12}],terms:"No flash.",status:"active"}
+  {id:1,name:"Dewa 19 Reunion Tour",artist:"Dewa 19",genre:"Rock",city:"Jakarta",venue:"GBK",date:"2026-11-15",time:"19:00",price:850000,img:"https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800",desc:"Konser reuni legendaris.",type:"duduk",categories:[{id:'VIP',price:2500000,rows:3,seats:8},{id:'CAT 1',price:1500000,rows:4,seats:10},{id:'CAT 2',price:850000,rows:5,seats:12}],status:"active"},
+  {id:2,name:"Tulus: Manusia Tour",artist:"Tulus",genre:"Pop",city:"Bandung",venue:"Trans Studio",date:"2026-10-22",time:"20:00",price:650000,img:"https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800",desc:"Tur nasional Tulus.",type:"duduk",categories:[{id:'Platinum',price:1800000,rows:3,seats:8},{id:'Gold',price:1000000,rows:4,seats:10},{id:'Silver',price:650000,rows:5,seats:12}],status:"active"},
+  {id:3,name:"Java Jazz Festival",artist:"Various",genre:"Jazz",city:"Jakarta",venue:"JIExpo",date:"2026-12-05",time:"16:00",price:1200000,img:"https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800",desc:"Festival jazz terbesar.",type:"berdiri",categories:[{id:'VIP',price:3500000,quota:200},{id:'Festival',price:1200000,quota:2000}],status:"active"},
+  {id:4,name:"We The Fest",artist:"Multiple",genre:"EDM",city:"Jakarta",venue:"GBK",date:"2026-11-28",time:"15:00",price:950000,img:"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800",desc:"Festival musik & seni.",type:"berdiri",categories:[{id:'Premium',price:2200000,quota:500},{id:'General',price:950000,quota:5000}],status:"active"},
+  {id:5,name:"Sheila on 7 — 25 Tahun",artist:"Sheila on 7",genre:"Pop",city:"Yogyakarta",venue:"Mandala Krida",date:"2026-12-20",time:"19:30",price:550000,img:"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800",desc:"Perayaan 25 tahun.",type:"duduk",categories:[{id:'VVIP',price:1500000,rows:2,seats:8},{id:'CAT 1',price:850000,rows:4,seats:10},{id:'CAT 2',price:550000,rows:5,seats:12}],status:"active"},
+  {id:6,name:"Payung Teduh Live",artist:"Payung Teduh",genre:"Indie",city:"Surabaya",venue:"Grand City",date:"2027-01-10",time:"20:00",price:450000,img:"https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800",desc:"Malam intim akustik.",type:"duduk",categories:[{id:'Front',price:900000,rows:3,seats:8},{id:'Middle',price:650000,rows:4,seats:10},{id:'Back',price:450000,rows:5,seats:12}],status:"active"}
 ];
 
 // ==========================================
 // STATE
 // ==========================================
 let state = {
-  currentUser:null,
-  currentEvent:null, selectedSeats:[], selectedCategory:null,
-  paymentMethod:'qris', promoDiscount:0,
-  tickets:JSON.parse(localStorage.getItem('kk_tickets')||'[]'),
-  transactions:JSON.parse(localStorage.getItem('kk_transactions')||'[]'),
-  groups:JSON.parse(localStorage.getItem('kk_groups')||'[]'),
-  ratings:JSON.parse(localStorage.getItem('kk_ratings')||'[]'),
-  holdTimer:null, payTimer:null, holdSeconds:600,
-  currentTicket:null, currentMode:null, currentPartnerCount:null,
-  currentGroup:null, currentRating:0,
-  adminLoginAttempts:parseInt(localStorage.getItem('kk_admin_attempts')||'0'),
-  adminLockUntil:parseInt(localStorage.getItem('kk_admin_lock')||'0')
+  currentUser: null,
+  currentEvent: null, selectedSeats: [], selectedCategory: null,
+  paymentMethod: 'qris', promoDiscount: 0,
+  tickets: [], transactions: [], groups: [], ratings: [],
+  holdTimer: null, payTimer: null, holdSeconds: 600,
+  currentTicket: null, currentMode: null, currentPartnerCount: null,
+  currentGroup: null, currentRating: 0,
+  adminLoginAttempts: parseInt(localStorage.getItem('kk_admin_attempts') || '0'),
+  adminLockUntil: parseInt(localStorage.getItem('kk_admin_lock') || '0')
 };
 
 // ==========================================
 // USER DATA MANAGEMENT (FIX GANTI AKUN)
 // ==========================================
 function getUserKey(baseKey) {
-    // Membuat key unik berdasarkan email user yang sedang login
-    return state.currentUser ? `${baseKey}_${state.currentUser.email}` : baseKey;
+  return state.currentUser ? (baseKey + '_' + state.currentUser.email) : baseKey;
 }
 
 function saveUserData() {
-    if (!state.currentUser) return;
-    saveUserData()(getUserKey('kk_tickets'), JSON.stringify(state.tickets));
-    saveUserData()(getUserKey('kk_transactions'), JSON.stringify(state.transactions));
-    saveUserData()(getUserKey('kk_groups'), JSON.stringify(state.groups));
-    saveUserData()(getUserKey('kk_ratings'), JSON.stringify(state.ratings));
+  if (!state.currentUser) return;
+  localStorage.setItem(getUserKey('kk_tickets'), JSON.stringify(state.tickets));
+  localStorage.setItem(getUserKey('kk_transactions'), JSON.stringify(state.transactions));
+  localStorage.setItem(getUserKey('kk_groups'), JSON.stringify(state.groups));
+  localStorage.setItem(getUserKey('kk_ratings'), JSON.stringify(state.ratings));
 }
 
 function loadUserData() {
-    if (!state.currentUser) {
-        state.tickets = [];
-        state.transactions = [];
-        state.groups = [];
-        state.ratings = [];
-        return;
-    }
-    // Hanya memuat data milik user yang sedang login
-    state.tickets = JSON.parse(localStorage.getItem(getUserKey('kk_tickets')) || '[]');
-    state.transactions = JSON.parse(localStorage.getItem(getUserKey('kk_transactions')) || '[]');
-    state.groups = JSON.parse(localStorage.getItem(getUserKey('kk_groups')) || '[]');
-    state.ratings = JSON.parse(localStorage.getItem(getUserKey('kk_ratings')) || '[]');
+  if (!state.currentUser) {
+    state.tickets = []; state.transactions = []; state.groups = []; state.ratings = [];
+    return;
+  }
+  state.tickets = JSON.parse(localStorage.getItem(getUserKey('kk_tickets')) || '[]');
+  state.transactions = JSON.parse(localStorage.getItem(getUserKey('kk_transactions')) || '[]');
+  state.groups = JSON.parse(localStorage.getItem(getUserKey('kk_groups')) || '[]');
+  state.ratings = JSON.parse(localStorage.getItem(getUserKey('kk_ratings')) || '[]');
 }
 
-// ==========================================
-// USER DATA MANAGEMENT (FIX GANTI AKUN)
-// ==========================================
-function getUserKey(baseKey) {
-    // Membuat key unik berdasarkan email user yang sedang login
-    return state.currentUser ? `${baseKey}_${state.currentUser.email}` : baseKey;
-}
-
-function saveUserData() {
-    if (!state.currentUser) return;
-    saveUserData()(getUserKey('kk_tickets'), JSON.stringify(state.tickets));
-    saveUserData()(getUserKey('kk_transactions'), JSON.stringify(state.transactions));
-    saveUserData()(getUserKey('kk_groups'), JSON.stringify(state.groups));
-    saveUserData()(getUserKey('kk_ratings'), JSON.stringify(state.ratings));
-}
-
-function loadUserData() {
-    if (!state.currentUser) {
-        state.tickets = [];
-        state.transactions = [];
-        state.groups = [];
-        state.ratings = [];
-        return;
-    }
-    // Hanya memuat data milik user yang sedang login
-    state.tickets = JSON.parse(localStorage.getItem(getUserKey('kk_tickets')) || '[]');
-    state.transactions = JSON.parse(localStorage.getItem(getUserKey('kk_transactions')) || '[]');
-    state.groups = JSON.parse(localStorage.getItem(getUserKey('kk_groups')) || '[]');
-    state.ratings = JSON.parse(localStorage.getItem(getUserKey('kk_ratings')) || '[]');
-}
-
-// Fungsi khusus Admin untuk melihat rekap SEMUA data dari semua user
 function getAllUsersData(baseKey) {
-    let allData = [];
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key.startsWith(baseKey + '_')) {
-            try {
-                const data = JSON.parse(localStorage.getItem(key) || '[]');
-                allData = allData.concat(data);
-            } catch(e) {}
-        }
+  let allData = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith(baseKey + '_')) {
+      try {
+        const data = JSON.parse(localStorage.getItem(key) || '[]');
+        allData = allData.concat(data);
+      } catch(e) {}
     }
-    return allData;
+  }
+  return allData;
 }
+
 // ==========================================
 // LOGIN SYSTEM
 // ==========================================
 function handleLogin(){
-  const email=document.getElementById('loginEmail').value.trim();
-  const password=document.getElementById('loginPassword').value.trim();
-  const errorDiv=document.getElementById('loginError');
-  const lockDiv=document.getElementById('loginLock');
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+  const errorDiv = document.getElementById('loginError');
   
-  if(!email||!password){
-    errorDiv.textContent='️ Email dan password wajib diisi!';
+  if(!email || !password){
+    errorDiv.textContent = '⚠️ Email dan password wajib diisi!';
     errorDiv.classList.add('show');
     return;
   }
   
   if(!email.includes('@')){
-    errorDiv.textContent='⚠️ Format email tidak valid!';
+    errorDiv.textContent = '⚠️ Format email tidak valid!';
     errorDiv.classList.add('show');
     return;
   }
   
-  // Simulasi login berhasil
-  state.currentUser={
-    email:email,
-    name:email.split('@')[0].charAt(0).toUpperCase()+email.split('@')[0].slice(1),
-    phone:'081234567890'
+  state.currentUser = {
+    email: email,
+    name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+    phone: '081234567890'
   };
-  saveUserData()('kk_currentUser',JSON.stringify(state.currentUser));
+  localStorage.setItem('kk_currentUser', JSON.stringify(state.currentUser));
   
   loadUserData();
-
-  // Tampilkan web
-  document.getElementById('loginOverlay').style.display='none';
-  document.getElementById('mainNavbar').style.display='flex';
-  document.getElementById('mainContainer').style.display='block';
-  document.getElementById('userName').textContent=state.currentUser.name;
-  document.getElementById('buyerEmail').value=email;
-  document.getElementById('buyerName').value=state.currentUser.name;
   
-  showToast('✅ Login berhasil! Selamat datang, '+state.currentUser.name,'success');
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('mainNavbar').style.display = 'flex';
+  document.getElementById('mainContainer').style.display = 'block';
+  document.getElementById('userName').textContent = state.currentUser.name;
+  document.getElementById('buyerEmail').value = email;
+  document.getElementById('buyerName').value = state.currentUser.name;
+  
+  showToast('✅ Login berhasil! Selamat datang, ' + state.currentUser.name, 'success');
   renderHome();
   renderEvents();
 }
 
 function handleGoogleLogin(){
-  // Simulasi Google Login
-  const email=prompt('🔐 Simulasi Google Login\n\nMasukkan email Google Anda:');
-  if(email&&email.includes('@')){
-    document.getElementById('loginEmail').value=email;
-    document.getElementById('loginPassword').value='google_oauth_simulated';
+  const email = prompt('🔐 Simulasi Google Login\n\nMasukkan email Google Anda:');
+  if(email && email.includes('@')){
+    document.getElementById('loginEmail').value = email;
+    document.getElementById('loginPassword').value = 'google_oauth_simulated';
     handleLogin();
   } else if(email){
     alert('⚠️ Format email tidak valid!');
@@ -983,157 +662,111 @@ function handleGoogleLogin(){
 }
 
 function checkLoginStatus(){
-  const saved=localStorage.getItem('kk_currentUser');
+  const saved = localStorage.getItem('kk_currentUser');
   if(saved){
-    state.currentUser=JSON.parse(saved);
+    state.currentUser = JSON.parse(saved);
     loadUserData();
-    document.getElementById('loginOverlay').style.display='none';
-    document.getElementById('mainNavbar').style.display='flex';
-    document.getElementById('mainContainer').style.display='block';
-    document.getElementById('userName').textContent=state.currentUser.name;
-    document.getElementById('buyerEmail').value=state.currentUser.email;
-    document.getElementById('buyerName').value=state.currentUser.name;
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('mainNavbar').style.display = 'flex';
+    document.getElementById('mainContainer').style.display = 'block';
+    document.getElementById('userName').textContent = state.currentUser.name;
+    document.getElementById('buyerEmail').value = state.currentUser.email;
+    document.getElementById('buyerName').value = state.currentUser.name;
     renderHome();
     renderEvents();
   }
 }
 
 function handleLogout() {
-    if (!confirm('Yakin ingin keluar dari akun ini?')) return;
-    
-    // Hapus sesi login
-    localStorage.removeItem('kk_currentUser');
-    
-    // Reset state data agar kosong untuk login berikutnya
-    state.currentUser = null;
-    state.tickets = [];
-    state.transactions = [];
-    state.groups = [];
-    state.ratings = [];
-    state.currentEvent = null;
-    state.currentTicket = null;
-    state.currentGroup = null;
-    
-    // Kembalikan tampilan ke halaman Login
-    document.getElementById('loginOverlay').style.display = 'flex';
-    document.getElementById('mainNavbar').style.display = 'none';
-    document.getElementById('mainContainer').style.display = 'none';
-    
-    // Kosongkan form login
-    document.getElementById('loginEmail').value = '';
-    document.getElementById('loginPassword').value = '';
-    
-    showToast('👋 Anda telah berhasil logout.', 'info');
+  if (!confirm('Yakin ingin keluar dari akun ini?')) return;
+  localStorage.removeItem('kk_currentUser');
+  state.currentUser = null;
+  state.tickets = []; state.transactions = []; state.groups = []; state.ratings = [];
+  state.currentEvent = null; state.currentTicket = null; state.currentGroup = null;
+  
+  document.getElementById('loginOverlay').style.display = 'flex';
+  document.getElementById('mainNavbar').style.display = 'none';
+  document.getElementById('mainContainer').style.display = 'none';
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+  showToast('👋 Anda telah berhasil logout.', 'info');
 }
 
 // ==========================================
 // ADMIN LOGIN SYSTEM
 // ==========================================
 function handleAdminAccess(){
-  const now=Date.now();
-  
-  // Cek apakah sedang di-lock
-  if(now<state.adminLockUntil){
-    const remaining=Math.ceil((state.adminLockUntil-now)/1000/60);
-    alert(`🔒 Akun admin terkunci!\n\nSilakan coba lagi dalam ${remaining} menit.\n\nAlasan: 3x percobaan login gagal.`);
+  const now = Date.now();
+  if(now < state.adminLockUntil){
+    const remaining = Math.ceil((state.adminLockUntil - now) / 1000 / 60);
+    alert(`🔒 Akun admin terkunci!\n\nSilakan coba lagi dalam ${remaining} menit.`);
     return;
   }
   
-  const username=prompt('🔐 Login Admin KonserKu\n\nUsername:');
-  if(!username)return;
+  const username = prompt('🔐 Login Admin KonserKu\n\nUsername:');
+  if(!username) return;
+  const password = prompt('Password:');
+  if(!password) return;
   
-  const password=prompt('Password:');
-  if(!password)return;
-  
-  if(username==='adminkonserku'&&password==='admin321'){
-    // Login berhasil
-    state.adminLoginAttempts=0;
-    saveUserData()('kk_admin_attempts','0');
-    showToast('✅ Login admin berhasil!','success');
+  if(username === 'adminkonserku' && password === 'admin321'){
+    state.adminLoginAttempts = 0;
+    localStorage.setItem('kk_admin_attempts', '0');
+    showToast('✅ Login admin berhasil!', 'success');
     showPage('admin');
   } else {
-    // Login gagal
     state.adminLoginAttempts++;
-    saveUserData()('kk_admin_attempts',state.adminLoginAttempts.toString());
-    
-    if(state.adminLoginAttempts>=3){
-      // Lock 2 menit
-      state.adminLockUntil=now+(2*60*1000);
-      saveUserData()('kk_admin_lock',state.adminLockUntil.toString());
-      state.adminLoginAttempts=0;
-      saveUserData()('kk_admin_attempts','0');
-      alert('🔒 AKUN TERKUNCI!\n\n3x percobaan login gagal.\n\nAkun admin terkunci selama 2 menit.\nSilakan coba lagi nanti.');
+    localStorage.setItem('kk_admin_attempts', state.adminLoginAttempts.toString());
+    if(state.adminLoginAttempts >= 3){
+      state.adminLockUntil = now + (2 * 60 * 1000);
+      localStorage.setItem('kk_admin_lock', state.adminLockUntil.toString());
+      state.adminLoginAttempts = 0;
+      localStorage.setItem('kk_admin_attempts', '0');
+      alert('🔒 AKUN TERKUNCI!\n\n3x percobaan login gagal.\nAkun admin terkunci selama 2 menit.');
     } else {
-      alert(`❌ Login gagal!\n\nUsername atau password salah.\n\nPercobaan: ${state.adminLoginAttempts}/3\n\n⚠️ Jika gagal 3x, akun akan terkunci 2 menit.`);
+      alert(`❌ Login gagal!\n\nPercobaan: ${state.adminLoginAttempts}/3`);
     }
   }
 }
 
 // ==========================================
-// NAVIGATION
+// NAVIGATION & UTILS
 // ==========================================
 function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const navBtn=document.querySelector(`.nav-btn[data-page="${id}"]`);
-  if(navBtn)navBtn.classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const navBtn = document.querySelector(`.nav-btn[data-page="${id}"]`);
+  if(navBtn) navBtn.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
   
-  if(id==='tickets')renderMyTickets();
-  if(id==='groups')renderMyGroups();
-  if(id==='admin')renderAdmin();
+  if(id === 'tickets') renderMyTickets();
+  if(id === 'groups') renderMyGroups();
+  if(id === 'admin') renderAdmin();
 }
 
-// ==========================================
-// PROFILE SYSTEM
-// ==========================================
-function openProfileModal(){
-  document.getElementById('profileName').value=state.currentUser.name;
-  document.getElementById('profileEmail').value=state.currentUser.email;
-  document.getElementById('profilePhone').value=state.currentUser.phone||'081234567890';
-  document.getElementById('profileModal').classList.add('show');
-}
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
 
-function saveProfile(){
-  const name=document.getElementById('profileName').value.trim();
-  const email=document.getElementById('profileEmail').value.trim();
-  const phone=document.getElementById('profilePhone').value.trim();
-  
-  if(!name||!email){
-    showToast('️ Nama dan email wajib diisi!','warn');
-    return;
-  }
-  
-  state.currentUser.name=name;
-  state.currentUser.email=email;
-  state.currentUser.phone=phone;
-  saveUserData()('kk_currentUser',JSON.stringify(state.currentUser));
-  
-  document.getElementById('userName').textContent=name;
-  document.getElementById('buyerName').value=name;
-  document.getElementById('buyerEmail').value=email;
-  document.getElementById('buyerPhone').value=phone;
-  
-  closeModal('profileModal');
-  showToast('✅ Profil berhasil diperbarui!','success');
-}
+function formatDate(d){ return new Date(d).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}); }
+function formatTime(d){ return new Date(d).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}); }
 
-function closeModal(id){
-  document.getElementById(id).classList.remove('show');
+function showToast(msg, type='success'){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3500);
 }
 
 // ==========================================
 // RENDER EVENTS
 // ==========================================
-function renderEventCard(e,featured=false){
-  const early=e.price<700000;
-  const cancelled=e.status==='cancelled';
-  return `<div class="event-card" onclick="${cancelled?'':`openDetail(${e.id})`}" style="${cancelled?'opacity:.6;cursor:not-allowed':''}">
+function renderEventCard(e, featured=false){
+  const early = e.price < 700000;
+  const cancelled = e.status === 'cancelled';
+  return `<div class="event-card" onclick="${cancelled ? '' : `openDetail(${e.id})`}" style="${cancelled ? 'opacity:.6;cursor:not-allowed' : ''}">
     <div class="event-img" style="background-image:url('${e.img}')">
-      ${featured&&!cancelled?'<div class="event-badge">🔥 POPULER</div>':''}
-      ${early&&!cancelled?'<div class="event-badge early">🐦 EARLY BIRD</div>':''}
-      ${cancelled?'<div class="event-badge cancelled">❌ DIBATALKAN</div>':''}
+      ${featured && !cancelled ? '<div class="event-badge">🔥 POPULER</div>' : ''}
+      ${early && !cancelled ? '<div class="event-badge early">🐦 EARLY BIRD</div>' : ''}
+      ${cancelled ? '<div class="event-badge cancelled">❌ DIBATALKAN</div>' : ''}
     </div>
     <div class="event-info">
       <h3>${e.name}</h3>
@@ -1144,40 +777,36 @@ function renderEventCard(e,featured=false){
       </div>
       <div class="event-price">
         <div class="price">Rp ${e.price.toLocaleString('id-ID')} <small style="color:#94a3b8;font-weight:normal">/ mulai</small></div>
-        <button class="btn" ${cancelled?'disabled style="opacity:.5"':''}>${cancelled?'Dibatalkan':'Pesan'}</button>
+        <button class="btn" ${cancelled ? 'disabled style="opacity:.5"' : ''}>${cancelled ? 'Dibatalkan' : 'Pesan'}</button>
       </div>
     </div>
   </div>`;
 }
 
 function renderHome(){
-  document.getElementById('featuredGrid').innerHTML=EVENTS.filter(e=>e.status==='active').slice(0,3).map(e=>renderEventCard(e,true)).join('');
-  document.getElementById('earlyGrid').innerHTML=EVENTS.filter(e=>e.status==='active'&&e.price<700000).map(e=>renderEventCard(e)).join('');
+  document.getElementById('featuredGrid').innerHTML = EVENTS.filter(e => e.status === 'active').slice(0,3).map(e => renderEventCard(e, true)).join('');
+  document.getElementById('earlyGrid').innerHTML = EVENTS.filter(e => e.status === 'active' && e.price < 700000).map(e => renderEventCard(e)).join('');
 }
 
 function renderEvents(){
-  const q=(document.getElementById('searchAll')?.value||'').toLowerCase();
-  const g=document.getElementById('filterGenreAll')?.value||'';
-  const c=document.getElementById('filterCityAll')?.value||'';
-  const filtered=EVENTS.filter(e=>(e.name.toLowerCase().includes(q)||e.artist.toLowerCase().includes(q))&&(!g||e.genre===g)&&(!c||e.city===c));
-  document.getElementById('allEventsGrid').innerHTML=filtered.length?filtered.map(e=>renderEventCard(e)).join(''):'<p style="color:#94a3b8;text-align:center;grid-column:1/-1;padding:40px">Tidak ada konser ditemukan</p>';
+  const q = (document.getElementById('searchAll')?.value || '').toLowerCase();
+  const g = document.getElementById('filterGenreAll')?.value || '';
+  const c = document.getElementById('filterCityAll')?.value || '';
+  const filtered = EVENTS.filter(e => (e.name.toLowerCase().includes(q) || e.artist.toLowerCase().includes(q)) && (!g || e.genre === g) && (!c || e.city === c));
+  document.getElementById('allEventsGrid').innerHTML = filtered.length ? filtered.map(e => renderEventCard(e)).join('') : '<p style="color:#94a3b8;text-align:center;grid-column:1/-1;padding:40px">Tidak ada konser ditemukan</p>';
 }
 
 function doSearch(){
-  const q=document.getElementById('searchInput').value;
-  document.getElementById('searchAll').value=q;
+  document.getElementById('searchAll').value = document.getElementById('searchInput').value;
   showPage('events');
   renderEvents();
 }
 
-// ==========================================
-// DETAIL
-// ==========================================
 function openDetail(id){
-  const e=EVENTS.find(x=>x.id===id);
-  if(!e||e.status==='cancelled')return;
-  state.currentEvent=e;
-  document.getElementById('detailContent').innerHTML=`
+  const e = EVENTS.find(x => x.id === id);
+  if(!e || e.status === 'cancelled') return;
+  state.currentEvent = e;
+  document.getElementById('detailContent').innerHTML = `
     <div class="detail-header" style="background-image:url('${e.img}')">
       <div class="detail-info">
         <h1>${e.name}</h1>
@@ -1193,14 +822,13 @@ function openDetail(id){
           <div class="info-row"><span class="label">Waktu</span><span class="value">${e.time} WIB</span></div>
           <div class="info-row"><span class="label">Venue</span><span class="value">${e.venue}</span></div>
           <div class="info-row"><span class="label">Kota</span><span class="value">${e.city}</span></div>
-          <div class="info-row"><span class="label">Tipe</span><span class="value">${e.type==='duduk'?'🪑 Duduk':'🧍 Berdiri'}</span></div>
+          <div class="info-row"><span class="label">Tipe</span><span class="value">${e.type === 'duduk' ? '🪑 Duduk' : '🧍 Berdiri'}</span></div>
         </div>
-        <div class="card"><h3> Syarat & Ketentuan</h3><p style="color:#94a3b8">${e.terms}</p></div>
       </div>
       <div>
         <div class="card">
           <h3>🎟️ Pilih Kategori</h3>
-          ${e.categories.map(c=>`<div class="info-row" style="cursor:pointer" onclick="selectCategory('${c.id}')">
+          ${e.categories.map(c => `<div class="info-row" style="cursor:pointer" onclick="selectCategory('${c.id}')">
             <div><div class="value">${c.id}</div><div class="label">Rp ${c.price.toLocaleString('id-ID')}</div></div>
             <button class="btn">Pilih</button>
           </div>`).join('')}
@@ -1212,66 +840,66 @@ function openDetail(id){
   showPage('detail');
 }
 
-function selectCategory(catId){state.selectedCategory=catId;goToSeats()}
+function selectCategory(catId){ state.selectedCategory = catId; goToSeats(); }
 
 // ==========================================
-// SEATS
+// SEATS & CHECKOUT
 // ==========================================
 function goToSeats(){
-  const e=state.currentEvent;
-  if(!e)return openDetail(e.id);
-  document.getElementById('seatEventName').textContent=e.name;
-  state.selectedSeats=[];
+  const e = state.currentEvent;
+  if(!e) return openDetail(e.id);
+  document.getElementById('seatEventName').textContent = e.name;
+  state.selectedSeats = [];
   renderSeatMap();
   updateSeatSummary();
   showPage('seats');
 }
 
 function renderSeatMap(){
-  const e=state.currentEvent;
-  const map=document.getElementById('seatMap');
-  map.innerHTML='';
-  if(e.type==='duduk'){
-    e.categories.forEach(cat=>{
-      const label=document.createElement('div');
-      label.style.cssText='grid-column:1/-1;text-align:center;margin:16px 0 8px;font-weight:bold;color:#06b6d4';
-      label.textContent=`${cat.id} — Rp ${cat.price.toLocaleString('id-ID')}`;
+  const e = state.currentEvent;
+  const map = document.getElementById('seatMap');
+  map.innerHTML = '';
+  if(e.type === 'duduk'){
+    e.categories.forEach(cat => {
+      const label = document.createElement('div');
+      label.style.cssText = 'grid-column:1/-1;text-align:center;margin:16px 0 8px;font-weight:bold;color:#06b6d4';
+      label.textContent = `${cat.id} — Rp ${cat.price.toLocaleString('id-ID')}`;
       map.appendChild(label);
-      const grid=document.createElement('div');
-      grid.style.cssText=`display:grid;grid-template-columns:repeat(${cat.seats},34px);gap:8px;justify-content:center;margin-bottom:16px`;
-      for(let r=0;r<cat.rows;r++){
-        for(let s=0;s<cat.seats;s++){
-          const seat=document.createElement('div');
-          const seatId=`${cat.id}-${String.fromCharCode(65+r)}${s+1}`;
-          seat.className='seat';
-          seat.textContent=seatId.split('-')[1];
-          seat.dataset.id=seatId;
-          seat.dataset.cat=cat.id;
-          seat.dataset.price=cat.price;
-          const rand=Math.random();
-          if(rand<0.2){seat.classList.add('taken')}
-          else if(rand<0.3){seat.classList.add('hold')}
-          else{seat.onclick=()=>toggleSeat(seat)}
+      const grid = document.createElement('div');
+      grid.style.cssText = `display:grid;grid-template-columns:repeat(${cat.seats},34px);gap:8px;justify-content:center;margin-bottom:16px`;
+      for(let r=0; r<cat.rows; r++){
+        for(let s=0; s<cat.seats; s++){
+          const seat = document.createElement('div');
+          const seatId = `${cat.id}-${String.fromCharCode(65+r)}${s+1}`;
+          seat.className = 'seat';
+          seat.textContent = seatId.split('-')[1];
+          seat.dataset.id = seatId;
+          seat.dataset.cat = cat.id;
+          seat.dataset.price = cat.price;
+          const rand = Math.random();
+          if(rand < 0.2){ seat.classList.add('taken'); }
+          else if(rand < 0.3){ seat.classList.add('hold'); }
+          else { seat.onclick = () => toggleSeat(seat); }
           map.appendChild(seat);
         }
       }
     });
   } else {
-    e.categories.forEach(cat=>{
-      const card=document.createElement('div');
-      card.style.cssText='background:#0f172a;border:1px solid #475569;padding:16px;border-radius:10px;margin-bottom:12px;cursor:pointer';
-      const taken=Math.floor(cat.quota*(0.3+Math.random()*0.4));
-      const remaining=cat.quota-taken;
-      card.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center">
+    e.categories.forEach(cat => {
+      const card = document.createElement('div');
+      card.style.cssText = 'background:#0f172a;border:1px solid #475569;padding:16px;border-radius:10px;margin-bottom:12px;cursor:pointer';
+      const taken = Math.floor(cat.quota * (0.3 + Math.random() * 0.4));
+      const remaining = cat.quota - taken;
+      card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
         <div><div style="font-weight:bold">${cat.id}</div><div style="color:#94a3b8;font-size:13px">Rp ${cat.price.toLocaleString('id-ID')}</div></div>
         <div style="text-align:right"><div style="font-weight:bold;color:#10b981">${remaining} tersisa</div><div style="color:#94a3b8;font-size:12px">dari ${cat.quota}</div></div>
       </div>
       <div style="background:#475569;height:6px;border-radius:3px;margin-top:10px;overflow:hidden"><div style="background:linear-gradient(90deg,#8b5cf6,#06b6d4);height:100%;width:${(taken/cat.quota)*100}%"></div></div>`;
-      card.onclick=()=>{
-        document.querySelectorAll('.seat-cat-card').forEach(c=>c.style.borderColor='#475569');
-        card.style.borderColor='#8b5cf6';
+      card.onclick = () => {
+        document.querySelectorAll('.seat-cat-card').forEach(c => c.style.borderColor = '#475569');
+        card.style.borderColor = '#8b5cf6';
         card.classList.add('seat-cat-card');
-        state.selectedSeats=[{id:cat.id,cat:cat.id,price:cat.price}];
+        state.selectedSeats = [{id: cat.id, cat: cat.id, price: cat.price}];
         updateSeatSummary();
       };
       map.appendChild(card);
@@ -1279,660 +907,441 @@ function renderSeatMap(){
   }
 }
 
-function toggleGroupStatus(groupId, newStatus) {
-    const group = state.groups.find(g => g.id === groupId);
-    if (!group) return;
-    
-    const actionText = newStatus === 'concert' ? 'MEMULAI KONSER (tutup chat)' : newStatus === 'closed' ? 'MENUTUP GRUP' : 'MEMBUKA GRUP';
-    const confirmed = confirm(`⚠️ Konfirmasi Admin\n\nAnda yakin ingin ${actionText} untuk grup "${group.eventName}"?`);
-    
-    if (confirmed) {
-        group.status = newStatus;
-        if (newStatus === 'closed') {
-            group.closedAt = new Date().toISOString();
-            group.messages.push({type: 'system', text: '🔒 Grup ditutup oleh admin. Terima kasih telah bergabung!', time: new Date().toISOString()});
-        } else if (newStatus === 'concert') {
-            group.messages.push({type: 'system', text: '🎵 Konser sedang berlangsung! Chat ditutup sementara untuk kenyamanan bersama.', time: new Date().toISOString()});
-        }
-        saveUserData()('kk_groups', JSON.stringify(state.groups));
-        showToast(`✅ Grup "${group.eventName}" berhasil diubah statusnya!`, 'success');
-        renderAdminGroups();
-    }
+function toggleSeat(el){
+  if(el.classList.contains('taken') || el.classList.contains('hold')) return;
+  const id = el.dataset.id;
+  const idx = state.selectedSeats.findIndex(s => s.id === id);
+  if(idx >= 0){
+    state.selectedSeats.splice(idx, 1);
+    el.classList.remove('selected');
+  } else {
+    if(state.selectedSeats.length >= 6){ showToast('⚠️ Maksimal 6 tiket', 'warn'); return; }
+    state.selectedSeats.push({id, cat: el.dataset.cat, price: parseInt(el.dataset.price)});
+    el.classList.add('selected');
+  }
+  updateSeatSummary();
 }
 
 function updateSeatSummary(){
-  const box=document.getElementById('seatSummary');
-  const btn=document.getElementById('btnToCheckout');
-  const timerBox=document.getElementById('holdTimerBox');
-  if(state.selectedSeats.length===0){
-    box.innerHTML='<div style="color:#94a3b8;padding:20px 0;text-align:center">Belum ada kursi dipilih</div>';
-    btn.disabled=true;timerBox.style.display='none';return;
+  const box = document.getElementById('seatSummary');
+  const btn = document.getElementById('btnToCheckout');
+  const timerBox = document.getElementById('holdTimerBox');
+  if(state.selectedSeats.length === 0){
+    box.innerHTML = '<div style="color:#94a3b8;padding:20px 0;text-align:center">Belum ada kursi dipilih</div>';
+    btn.disabled = true; timerBox.style.display = 'none'; return;
   }
-  box.innerHTML=state.selectedSeats.map(s=>`<div class="info-row"><span>${s.cat} • ${s.id}</span><span class="value">Rp ${s.price.toLocaleString('id-ID')}</span></div>`).join('')
-    +`<div class="info-row" style="font-weight:bold;margin-top:8px"><span>${state.selectedSeats.length} tiket</span><span>Rp ${state.selectedSeats.reduce((a,b)=>a+b.price,0).toLocaleString('id-ID')}</span></div>`;
-  btn.disabled=false;timerBox.style.display='block';startHoldTimer();
+  box.innerHTML = state.selectedSeats.map(s => `<div class="info-row"><span>${s.cat} • ${s.id}</span><span class="value">Rp ${s.price.toLocaleString('id-ID')}</span></div>`).join('')
+    + `<div class="info-row" style="font-weight:bold;margin-top:8px"><span>${state.selectedSeats.length} tiket</span><span>Rp ${state.selectedSeats.reduce((a,b)=>a+b.price,0).toLocaleString('id-ID')}</span></div>`;
+  btn.disabled = false; timerBox.style.display = 'block'; startHoldTimer();
 }
 
 function startHoldTimer(){
-  if(state.holdTimer)clearInterval(state.holdTimer);
-  state.holdSeconds=600;updateHoldDisplay();
-  state.holdTimer=setInterval(()=>{
-    state.holdSeconds--;updateHoldDisplay();
-    if(state.holdSeconds<=0){clearInterval(state.holdTimer);showToast('⏰ Waktu hold habis','warn');state.selectedSeats=[];renderSeatMap();updateSeatSummary()}
-  },1000);
+  if(state.holdTimer) clearInterval(state.holdTimer);
+  state.holdSeconds = 600; updateHoldDisplay();
+  state.holdTimer = setInterval(() => {
+    state.holdSeconds--; updateHoldDisplay();
+    if(state.holdSeconds <= 0){
+      clearInterval(state.holdTimer);
+      showToast('⏰ Waktu hold habis', 'warn');
+      state.selectedSeats = []; renderSeatMap(); updateSeatSummary();
+    }
+  }, 1000);
 }
 function updateHoldDisplay(){
-  const m=Math.floor(state.holdSeconds/60),s=state.holdSeconds%60;
-  document.getElementById('holdTime').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const m = Math.floor(state.holdSeconds / 60), s = state.holdSeconds % 60;
+  document.getElementById('holdTime').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
 
-// ==========================================
-// CHECKOUT
-// ==========================================
 function goToCheckout(){
-  if(state.selectedSeats.length===0)return;
-  const total=state.selectedSeats.reduce((a,b)=>a+b.price,0);
-  const afterDisc=total-state.promoDiscount;
-  document.getElementById('checkoutSummary').innerHTML=`
+  if(state.selectedSeats.length === 0) return;
+  const total = state.selectedSeats.reduce((a,b) => a + b.price, 0);
+  const afterDisc = total - state.promoDiscount;
+  document.getElementById('checkoutSummary').innerHTML = `
     <div class="summary-row"><span>Event</span><span>${state.currentEvent.name}</span></div>
     <div class="summary-row"><span>Tanggal</span><span>${formatDate(state.currentEvent.date)}</span></div>
     <div class="summary-row"><span>Tiket (${state.selectedSeats.length}x)</span><span>Rp ${total.toLocaleString('id-ID')}</span></div>
-    ${state.promoDiscount>0?`<div class="summary-row" style="color:#10b981"><span>Diskon Promo</span><span>- Rp ${state.promoDiscount.toLocaleString('id-ID')}</span></div>`:''}
+    ${state.promoDiscount > 0 ? `<div class="summary-row" style="color:#10b981"><span>Diskon Promo</span><span>- Rp ${state.promoDiscount.toLocaleString('id-ID')}</span></div>` : ''}
     <div class="summary-row"><span>Biaya Layanan</span><span>Rp 15.000</span></div>`;
-  document.getElementById('checkoutTotal').textContent='Rp '+(afterDisc+15000).toLocaleString('id-ID');
+  document.getElementById('checkoutTotal').textContent = 'Rp ' + (afterDisc + 15000).toLocaleString('id-ID');
   showPage('checkout');
 }
 
 function selectPay(el){
-  document.querySelectorAll('.pay-method').forEach(m=>m.classList.remove('selected'));
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
   el.classList.add('selected');
-  state.paymentMethod=el.dataset.method;
+  state.paymentMethod = el.dataset.method;
 }
 
 function applyPromo(){
-  const code=document.getElementById('promoCode').value.toUpperCase();
-  const msg=document.getElementById('promoMsg');
-  if(code==='KONSER30'){
-    const total=state.selectedSeats.reduce((a,b)=>a+b.price,0);
-    state.promoDiscount=Math.floor(total*0.3);
-    msg.textContent='✓ Diskon 30%';msg.style.color='#10b981';
-  } else if(code==='EARLYBIRD'){
-    state.promoDiscount=50000;msg.textContent='✓ Diskon Rp 50.000';msg.style.color='#10b981';
-  } else {state.promoDiscount=0;msg.textContent='✗ Kode tidak valid';msg.style.color='#ef4444'}
+  const code = document.getElementById('promoCode').value.toUpperCase();
+  const msg = document.getElementById('promoMsg');
+  if(code === 'KONSER30'){
+    const total = state.selectedSeats.reduce((a,b) => a + b.price, 0);
+    state.promoDiscount = Math.floor(total * 0.3);
+    msg.textContent = '✓ Diskon 30%'; msg.style.color = '#10b981';
+  } else if(code === 'EARLYBIRD'){
+    state.promoDiscount = 50000; msg.textContent = '✓ Diskon Rp 50.000'; msg.style.color = '#10b981';
+  } else { state.promoDiscount = 0; msg.textContent = '✗ Kode tidak valid'; msg.style.color = '#ef4444'; }
   goToCheckout();
 }
 
 // ==========================================
-// QRIS PAYMENT SYSTEM
+// PAYMENT SYSTEM
 // ==========================================
 function processPayment(){
-  if(state.paymentMethod!=='qris'){
-    showToast('⚠️ Untuk demo, pilih QRIS','warn');return;
+  if(state.paymentMethod !== 'qris'){
+    showToast('⚠️ Untuk demo, pilih QRIS', 'warn'); return;
   }
-  const total=state.selectedSeats.reduce((a,b)=>a+b.price,0)-state.promoDiscount+15000;
-  const txId='TX'+Date.now().toString().slice(-10);
+  const total = state.selectedSeats.reduce((a,b) => a + b.price, 0) - state.promoDiscount + 15000;
+  const txId = 'TX' + Date.now().toString().slice(-10);
   
-  const transaction={
-    id:txId,
-    buyer:document.getElementById('buyerName').value,
-    email:document.getElementById('buyerEmail').value,
-    phone:document.getElementById('buyerPhone').value,
-    event:state.currentEvent,
-    seats:state.selectedSeats.map(s=>s.id),
-    amount:total,
-    status:'pending',
-    createdAt:new Date().toISOString(),
-    paidAt:null
+  const transaction = {
+    id: txId, buyer: document.getElementById('buyerName').value, email: document.getElementById('buyerEmail').value,
+    phone: document.getElementById('buyerPhone').value, event: state.currentEvent, seats: state.selectedSeats.map(s => s.id),
+    amount: total, status: 'pending', createdAt: new Date().toISOString(), paidAt: null
   };
   state.transactions.unshift(transaction);
-  saveUserData()('kk_transactions',JSON.stringify(state.transactions));
+  saveUserData();
   
-  document.getElementById('qrisTxId').textContent=txId;
-  document.getElementById('qrisBuyer').textContent=transaction.buyer;
-  document.getElementById('qrisEvent').textContent=state.currentEvent.name;
-  document.getElementById('qrisAmount').textContent='Rp '+total.toLocaleString('id-ID');
-  document.getElementById('qrisStatus').innerHTML='<span class="status-badge pending">⏳ Menunggu Pembayaran</span>';
+  document.getElementById('qrisTxId').textContent = txId;
+  document.getElementById('qrisBuyer').textContent = transaction.buyer;
+  document.getElementById('qrisEvent').textContent = state.currentEvent.name;
+  document.getElementById('qrisAmount').textContent = 'Rp ' + total.toLocaleString('id-ID');
+  document.getElementById('qrisStatus').innerHTML = '<span class="status-badge pending">⏳ Menunggu Pembayaran</span>';
   
-  const qbox=document.getElementById('qrisBox');
-  qbox.innerHTML='';
-  new QRCode(qbox,{text:`QRIS-KK-${txId}`,width:220,height:220});
+  const qbox = document.getElementById('qrisBox');
+  qbox.innerHTML = '';
+  new QRCode(qbox, {text: `QRIS-KK-${txId}`, width: 220, height: 220});
   
-  if(state.payTimer)clearInterval(state.payTimer);
-  let sec=600;
-  const upd=()=>{
-    const m=Math.floor(sec/60),s=sec%60;
-    document.getElementById('payTime').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  if(state.payTimer) clearInterval(state.payTimer);
+  let sec = 600;
+  const upd = () => {
+    const m = Math.floor(sec / 60), s = sec % 60;
+    document.getElementById('payTime').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   };
   upd();
-  state.payTimer=setInterval(()=>{
-    sec--;upd();
-    if(sec<=0){
+  state.payTimer = setInterval(() => {
+    sec--; upd();
+    if(sec <= 0){
       clearInterval(state.payTimer);
-      showToast('⏰ Pembayaran expired','error');
-      updateTransactionStatus(txId,'failed');
+      showToast('⏰ Pembayaran expired', 'error');
+      updateTransactionStatus(txId, 'failed');
     }
-  },1000);
+  }, 1000);
   
-  state._currentTxId=txId;
+  state._currentTxId = txId;
   showPage('qris');
 }
 
 function confirmBankTransfer() {
-    const file = document.getElementById('bankProof').files[0];
-    if (!file) {
-        showToast('⚠️ Harap upload bukti transfer terlebih dahulu!', 'warn');
-        return;
-    }
-    
-    showToast('⏳ Bukti transfer sedang dikirim untuk diverifikasi admin...', 'info');
-    
-    // Simulasi masuk ke antrean verifikasi admin
-    setTimeout(() => {
-        showToast('✅ Bukti terkirim! Status tiket: Menunggu Verifikasi Admin. Cek halaman "Tiket Saya".', 'success');
-        showPage('tickets');
-    }, 1500);
+  const file = document.getElementById('bankProof').files[0];
+  if (!file) { showToast('⚠️ Harap upload bukti transfer terlebih dahulu!', 'warn'); return; }
+  showToast('⏳ Bukti transfer sedang dikirim untuk diverifikasi admin...', 'info');
+  setTimeout(() => {
+    showToast('✅ Bukti terkirim! Status tiket: Menunggu Verifikasi Admin.', 'success');
+    showPage('tickets');
+  }, 1500);
 }
 
 function simulatePaid(){
-  if(!state._currentTxId)return;
+  if(!state._currentTxId) return;
   clearInterval(state.payTimer);
-  showToast('⏳ Memverifikasi pembayaran...','info');
-  
-  setTimeout(()=>{
-    updateTransactionStatus(state._currentTxId,'success');
-    document.getElementById('qrisStatus').innerHTML='<span class="status-badge success">✅ Berhasil</span>';
+  showToast('⏳ Memverifikasi pembayaran...', 'info');
+  setTimeout(() => {
+    updateTransactionStatus(state._currentTxId, 'success');
+    document.getElementById('qrisStatus').innerHTML = '<span class="status-badge success">✅ Berhasil</span>';
     
-    const tx=state.transactions.find(t=>t.id===state._currentTxId);
-    const ticket={
-      id:'KK'+Date.now().toString().slice(-8),
-      txId:state._currentTxId,
-      event:tx.event,
-      seats:tx.seats,
-      buyer:tx.buyer,
-      email:tx.email,
-      total:tx.amount,
-      date:new Date().toISOString(),
-      status:'active',
-      mode:null
+    const tx = state.transactions.find(t => t.id === state._currentTxId);
+    const ticket = {
+      id: 'KK' + Date.now().toString().slice(-8), txId: state._currentTxId, event: tx.event, seats: tx.seats,
+      buyer: tx.buyer, email: tx.email, total: tx.amount, date: new Date().toISOString(), status: 'active', mode: null
     };
     state.tickets.unshift(ticket);
-    saveUserData()('kk_tickets',JSON.stringify(state.tickets));
-    state.currentTicket=ticket;
-    
-    // Kirim email simulasi
+    saveUserData();
+    state.currentTicket = ticket;
     sendTicketEmail(ticket);
     
-    showToast('✅ Pembayaran berhasil! Tiket terbit! Email terkirim!','success');
-    setTimeout(()=>showPage('mode'),1000);
-  },1500);
+    showToast('✅ Pembayaran berhasil! Tiket terbit!', 'success');
+    setTimeout(() => showPage('mode'), 1000);
+  }, 1500);
 }
 
-function updateTransactionStatus(txId,status){
-  const tx=state.transactions.find(t=>t.id===txId);
+function updateTransactionStatus(txId, status){
+  const tx = state.transactions.find(t => t.id === txId);
   if(tx){
-    tx.status=status;
-    if(status==='success')tx.paidAt=new Date().toISOString();
-    saveUserData()('kk_transactions',JSON.stringify(state.transactions));
+    tx.status = status;
+    if(status === 'success') tx.paidAt = new Date().toISOString();
+    saveUserData();
   }
 }
 
-// ==========================================
-// EMAIL SYSTEM - EMAILJS (BENERAN TERKIRIM!)
-// ==========================================
 function sendTicketEmail(ticket){
-  const email = ticket.email;
-  const name = ticket.buyer;
-  
-  // Parameter yang dikirim ke EmailJS (harus sama dengan {{variable}} di template EmailJS kamu)
   const templateParams = {
-    to_email: email,
-    buyer_name: name,
-    event_name: ticket.event.name,
-    event_date: formatDate(ticket.event.date),
-    event_time: ticket.event.time,
-    venue: ticket.event.venue,
-    seats: ticket.seats.join(', '),
-    total: ticket.total.toLocaleString('id-ID'),
-    ticket_id: ticket.id,
-    transaction_id: ticket.txId,
-    from_name: 'KonserKu',
-    reply_to: 'kaniaagarista@gmail.com'
+    to_email: ticket.email, buyer_name: ticket.buyer, event_name: ticket.event.name,
+    event_date: formatDate(ticket.event.date), event_time: ticket.event.time, venue: ticket.event.venue,
+    seats: ticket.seats.join(', '), total: ticket.total.toLocaleString('id-ID'),
+    ticket_id: ticket.id, transaction_id: ticket.txId, from_name: 'KonserKu'
   };
-  
-  // Konfigurasi EmailJS Anda
-  const SERVICE_ID = 'service_wo1wc25';
-  const TEMPLATE_ID = 'c2qlflw';
-  
-  showToast('⏳ Mengirim email tiket ke ' + email + '...','info');
-  
-  // Kirim email via EmailJS
-  emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
-    .then(function(response) {
-      console.log('✅ Email berhasil dikirim!', response.status, response.text);
-      showToast('✅ Email tiket terkirim ke ' + email + ' 📧','success');
-    }, function(error) {
-      console.error('❌ Gagal kirim email:', error);
-      showToast('⚠️ Email gagal terkirim. Cek console (F12) untuk detail.','warn');
-    });
+  emailjs.send('service_wo1wc25', 'c2qlflw', templateParams)
+    .then(() => showToast('✅ Email tiket terkirim ke ' + ticket.email, 'success'))
+    .catch(() => showToast('⚠️ Email gagal terkirim. Cek console (F12).', 'warn'));
 }
 
 // ==========================================
-// MODE SELECTION
+// MODE & GROUP SYSTEM
 // ==========================================
 function selectMode(mode){
-  state.currentMode=mode;
-  if(mode==='solo'){
-    joinSoloGroup();
-  } else {
-    showPage('partner');
-  }
+  state.currentMode = mode;
+  if(mode === 'solo') joinSoloGroup();
+  else showPage('partner');
 }
 
-// ==========================================
-// PARTNER SYSTEM
-// ==========================================
 function selectPartnerCount(count){
-  state.currentPartnerCount=count;
-  const container=document.getElementById('partnerFormContainer');
-  
-  if(count==='custom'){
-    container.innerHTML=`
-      <div class="partner-form">
-        <h3 style="color:#38bdf8;margin-bottom:15px">✉️ Undang Teman Konser</h3>
-        <p style="color:#94a3b8;margin-bottom:15px">Masukkan nama teman yang ingin Anda ajak nonton</p>
-        <div class="form-group">
-          <label>Nama Teman / Partner</label>
-          <input type="text" id="customPartnerName" placeholder="Contoh: Budi, Siti, dll" />
-        </div>
-        <button class="btn full" onclick="createCustomPartnerGroup()">Buat Grup Partner</button>
-      </div>`;
+  state.currentPartnerCount = count;
+  const container = document.getElementById('partnerFormContainer');
+  if(count === 'custom'){
+    container.innerHTML = `<div class="partner-form">
+      <h3 style="color:#38bdf8;margin-bottom:15px">✉️ Undang Teman Konser</h3>
+      <div class="form-group"><label>Nama Teman</label><input type="text" id="customPartnerName" placeholder="Contoh: Budi" /></div>
+      <button class="btn full" onclick="createCustomPartnerGroup()">Buat Grup Partner</button>
+    </div>`;
   } else {
-    const partnerCount=count-1;
-    let formHtml=`<div class="partner-form">
-      <h3 style="color:#38bdf8;margin-bottom:15px"> Input Biodata Partner (${partnerCount} orang)</h3>
-      <p style="color:#94a3b8;margin-bottom:15px">Isi biodata lengkap untuk setiap partner Anda</p>`;
-    
-    for(let i=0;i<partnerCount;i++){
-      formHtml+=`
-        <div class="partner-card">
-          <h4>Partner ${i+1}</h4>
-          <div class="form-group"><label>Nama Lengkap</label><input type="text" id="p${i}_name" placeholder="Nama partner" /></div>
-          <div class="form-group">
-            <label>Gender</label>
-            <select id="p${i}_gender">
-              <option value="">-- Pilih --</option>
-              <option>Laki-laki</option>
-              <option>Perempuan</option>
-              <option>Lainnya</option>
-            </select>
-          </div>
-          <div class="form-group"><label>No. Telepon</label><input type="tel" id="p${i}_phone" placeholder="08xxxxxxxxxx" /></div>
-          <div class="form-group"><label>Deskripsi / Minat Musik</label><textarea id="p${i}_desc" rows="2" placeholder="Contoh: Suka rock, excited nonton Dewa 19"></textarea></div>
-        </div>`;
+    const partnerCount = count - 1;
+    let formHtml = `<div class="partner-form"><h3 style="color:#38bdf8;margin-bottom:15px">Input Biodata Partner (${partnerCount} orang)</h3>`;
+    for(let i=0; i<partnerCount; i++){
+      formHtml += `<div class="partner-card">
+        <h4>Partner ${i+1}</h4>
+        <div class="form-group"><label>Nama Lengkap</label><input type="text" id="p${i}_name" /></div>
+        <div class="form-group"><label>Gender</label><select id="p${i}_gender"><option>Laki-laki</option><option>Perempuan</option></select></div>
+        <div class="form-group"><label>No. Telepon</label><input type="tel" id="p${i}_phone" /></div>
+      </div>`;
     }
-    formHtml+=`<button class="btn full success" onclick="createPartnerGroup()">✅ Buat Grup Partner & Masuk Chat</button></div>`;
-    container.innerHTML=formHtml;
+    formHtml += `<button class="btn full success" onclick="createPartnerGroup()">✅ Buat Grup Partner</button></div>`;
+    container.innerHTML = formHtml;
   }
 }
 
 function createCustomPartnerGroup(){
-  const name=document.getElementById('customPartnerName').value.trim();
-  if(!name){showToast('⚠️ Nama partner wajib diisi','warn');return}
-  
-  const group=createGroup('custom',[{name:state.currentUser.name+' (Anda)',gender:'-',phone:state.currentUser.phone||'081234567890',desc:'Host grup'},{name,gender:'-',phone:'-',desc:'Teman konser'}]);
-  state.currentGroup=group;
+  const name = document.getElementById('customPartnerName').value.trim();
+  if(!name){ showToast('⚠️ Nama partner wajib diisi', 'warn'); return; }
+  state.currentGroup = createGroup('custom', [{name: state.currentUser.name+' (Anda)', gender:'-', phone: state.currentUser.phone, desc:'Host'}, {name, gender:'-', phone:'-', desc:'Teman'}]);
   showPartnerChat();
 }
 
 function createPartnerGroup(){
-  const count=state.currentPartnerCount-1;
-  const partners=[{name:state.currentUser.name+' (Anda)',gender:'-',phone:state.currentUser.phone||'081234567890',desc:'Host grup'}];
-  
-  for(let i=0;i<count;i++){
-    const name=document.getElementById(`p${i}_name`).value.trim();
-    const gender=document.getElementById(`p${i}_gender`).value;
-    const phone=document.getElementById(`p${i}_phone`).value.trim();
-    const desc=document.getElementById(`p${i}_desc`).value.trim();
-    
-    if(!name||!gender||!phone){
-      showToast(`⚠️ Partner ${i+1} belum lengkap!`,'warn');return;
-    }
-    partners.push({name,gender,phone,desc});
+  const count = state.currentPartnerCount - 1;
+  const partners = [{name: state.currentUser.name+' (Anda)', gender:'-', phone: state.currentUser.phone, desc:'Host'}];
+  for(let i=0; i<count; i++){
+    const name = document.getElementById(`p${i}_name`).value.trim();
+    const gender = document.getElementById(`p${i}_gender`).value;
+    const phone = document.getElementById(`p${i}_phone`).value.trim();
+    if(!name || !gender || !phone){ showToast(`⚠️ Partner ${i+1} belum lengkap!`, 'warn'); return; }
+    partners.push({name, gender, phone, desc: ''});
   }
-  
-  const group=createGroup(state.currentPartnerCount,partners);
-  state.currentGroup=group;
+  state.currentGroup = createGroup(state.currentPartnerCount, partners);
   showPartnerChat();
 }
 
-function createGroup(size,members){
-  const group={
-    id:'GRP'+Date.now().toString().slice(-8),
-    ticketId:state.currentTicket.id,
-    eventId:state.currentTicket.event.id,
-    eventName:state.currentTicket.event.name,
-    size:size,
-    members:members,
-    messages:[{type:'system',text:`🎉 Grup "${size==='custom'?'Teman Konser':'Partner '+size+' orang'}" dibuat! Selamat berdiskusi!`,time:new Date().toISOString()}],
-    status:'active',
-    createdAt:new Date().toISOString(),
-    concertStarted:false,
-    closedAt:null,
-    ratings:[]
+function createGroup(size, members){
+  const group = {
+    id: 'GRP' + Date.now().toString().slice(-8), ticketId: state.currentTicket.id,
+    eventId: state.currentTicket.event.id, eventName: state.currentTicket.event.name,
+    size: size, members: members,
+    messages: [{type: 'system', text: `🎉 Grup dibuat! Selamat berdiskusi!`, time: new Date().toISOString()}],
+    status: 'active', createdAt: new Date().toISOString(), concertStarted: false, closedAt: null, ratings: []
   };
   state.groups.unshift(group);
-  saveUserData()('kk_groups',JSON.stringify(state.groups));
+  saveUserData();
   return group;
 }
 
-// ==========================================
-// PARTNER CHAT ROOM
-// ==========================================
 function showPartnerChat(){
-  const group=state.currentGroup;
-  document.getElementById('partnerChatTitle').textContent=`💬 Grup ${group.size==='custom'?'Teman Konser':'Partner '+group.size+' Orang'} - ${group.eventName}`;
-  document.getElementById('partnerChatInfo').textContent=`${group.members.length} anggota • ${group.status==='active'?'🟢 Aktif':'🔴 Ditutup'}`;
-  
+  const group = state.currentGroup;
+  document.getElementById('partnerChatTitle').textContent = `💬 Grup Partner - ${group.eventName}`;
+  document.getElementById('partnerChatInfo').textContent = `${group.members.length} anggota • 🟢 Aktif`;
   renderPartnerMessages();
   
-  let partnerHtml=`<div class="card"><h3>👥 Anggota Grup</h3><div class="partner-list">`;
-  group.members.forEach(m=>{
-    partnerHtml+=`<div class="partner-item">
-      <div class="av">${m.name.charAt(0)}</div>
-      <div class="name">${m.name}</div>
-      <div style="color:#94a3b8;font-size:11px">${m.gender}</div>
-      <div class="desc">${m.desc||'-'}</div>
-    </div>`;
+  let partnerHtml = `<div class="card"><h3>👥 Anggota Grup</h3><div class="partner-list">`;
+  group.members.forEach(m => {
+    partnerHtml += `<div class="partner-item"><div class="av">${m.name.charAt(0)}</div><div class="name">${m.name}</div><div class="desc">${m.desc || '-'}</div></div>`;
   });
-  partnerHtml+=`</div></div>`;
-  
-  partnerHtml+=`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px">
-    <button class="btn full" onclick="proposeConcertAgain()"> Ajak Konser Ulang (Butuh Verifikasi Semua)</button>
-    <button class="btn ghost full" onclick="showPage('tickets')"> Lihat Tiket</button>
-  </div>`;
-  
-  document.getElementById('partnerActions').innerHTML=partnerHtml;
+  partnerHtml += `</div></div>`;
+  document.getElementById('partnerActions').innerHTML = partnerHtml;
   showPage('partner-chat');
-  
   simulatePartnerChat();
 }
 
 function renderPartnerMessages(){
-  const group=state.currentGroup;
-  const container=document.getElementById('partnerChatMessages');
-  container.innerHTML=group.messages.map(m=>{
-    if(m.type==='system'){
-      return `<div class="chat-msg system"><div class="content">${m.text}</div></div>`;
-    }
-    if(m.type==='warning'){
-      const warningClass=m.warningType==='disaster'?'warning-disaster':m.warningType==='riot'?'warning-riot':'warning-medical';
-      const icon=m.warningType==='disaster'?'🌊':m.warningType==='riot'?'⚠️':'🏥';
-      return `<div class="chat-msg admin ${warningClass}">
-        <div class="av">${icon}</div>
-        <div>
-          <div class="name">📢 PERINGATAN ADMIN • ${formatTime(m.time)}</div>
-          <div class="content"><strong>${m.title}</strong><br>${m.text}</div>
-        </div>
-      </div>`;
-    }
-    const isMe=m.sender.includes('Anda');
-    return `<div class="chat-msg" style="${isMe?'flex-direction:row-reverse':''}">
+  const group = state.currentGroup;
+  const container = document.getElementById('partnerChatMessages');
+  container.innerHTML = group.messages.map(m => {
+    if(m.type === 'system') return `<div class="chat-msg system"><div class="content">${m.text}</div></div>`;
+    const isMe = m.sender.includes('Anda');
+    return `<div class="chat-msg" style="${isMe ? 'flex-direction:row-reverse' : ''}">
       <div class="av">${m.sender.charAt(0)}</div>
-      <div style="${isMe?'text-align:right':''}">
-        <div class="name" style="${isMe?'text-align:right':''}">${m.sender} • ${formatTime(m.time)}</div>
+      <div style="${isMe ? 'text-align:right' : ''}">
+        <div class="name">${m.sender} • ${formatTime(m.time)}</div>
         <div class="content">${m.text}</div>
       </div>
     </div>`;
   }).join('');
-  container.scrollTop=container.scrollHeight;
+  container.scrollTop = container.scrollHeight;
 }
 
 function sendPartnerChat(){
-  const text=document.getElementById('partnerChatText').value.trim();
-  if(!text)return;
-  if(state.currentGroup.status!=='active'){showToast('⚠️ Grup sudah ditutup','warn');return}
-  
-  state.currentGroup.messages.push({type:'user',sender:state.currentUser.name,text,time:new Date().toISOString()});
-  saveUserData()('kk_groups',JSON.stringify(state.groups));
-  document.getElementById('partnerChatText').value='';
+  const text = document.getElementById('partnerChatText').value.trim();
+  if(!text) return;
+  state.currentGroup.messages.push({type: 'user', sender: state.currentUser.name, text, time: new Date().toISOString()});
+  saveUserData();
+  document.getElementById('partnerChatText').value = '';
   renderPartnerMessages();
 }
 
 function simulatePartnerChat(){
-  const responses=[
-    "Halo semua! Excited banget nih! 🎉",
-    "Siapa yang udah pernah nonton artis ini sebelumnya?",
-    "Kita ketemuan di venue jam berapa ya?",
-    "Aku bawa snack nih, mau share! 🍿",
-    "Setuju gak kita pakai baju tema hitam?",
-    "Gate buka jam 17:00, jangan telat ya!"
-  ];
-  
-  let idx=0;
-  const interval=setInterval(()=>{
-    if(idx>=3||!state.currentGroup||state.currentGroup.status!=='active'){clearInterval(interval);return}
-    const partner=state.currentGroup.members[Math.floor(Math.random()*(state.currentGroup.members.length-1))+1];
+  const responses = ["Halo semua! Excited banget nih! 🎉", "Kita ketemuan di venue jam berapa ya?", "Aku bawa snack nih, mau share! 🍿"];
+  let idx = 0;
+  const interval = setInterval(() => {
+    if(idx >= 2 || !state.currentGroup || state.currentGroup.status !== 'active'){ clearInterval(interval); return; }
+    const partner = state.currentGroup.members[Math.floor(Math.random() * (state.currentGroup.members.length - 1)) + 1];
     if(partner){
-      state.currentGroup.messages.push({type:'user',sender:partner.name,text:responses[idx%responses.length],time:new Date().toISOString()});
-      saveUserData()('kk_groups',JSON.stringify(state.groups));
+      state.currentGroup.messages.push({type: 'user', sender: partner.name, text: responses[idx], time: new Date().toISOString()});
+      saveUserData();
       renderPartnerMessages();
       idx++;
     }
-  },4000);
+  }, 4000);
 }
 
-function proposeConcertAgain(){
-  const group=state.currentGroup;
-  const confirmed=confirm(`Ajak semua partner untuk menonton konser "${group.eventName}" lagi? Semua partner harus menyetujui.`);
-  if(!confirmed)return;
-  
-  showToast('⏳ Mengirim undangan ke semua partner...','info');
-  setTimeout(()=>{
-    const allAgree=confirm(`Simulasi: Semua partner (${group.members.length-1} orang) menyetujui konser ulang!\n\nKlik OK untuk kembali ke beranda dan pilih partner baru.`);
-    if(allAgree){
-      group.messages.push({type:'system',text:'✅ Semua partner setuju untuk konser ulang! Grup akan ditutup.',time:new Date().toISOString()});
-      group.status='completed';
-      saveUserData()('kk_groups',JSON.stringify(state.groups));
-      showToast('🎉 Kembali ke beranda untuk pilih partner baru!','success');
-      showPage('home');
-    }
-  },1500);
-}
-
-function leavePartnerChat(){
-  showPage('tickets');
-}
-
-// ==========================================
-// SOLO GROUP
-// ==========================================
 function joinSoloGroup(){
-  let group=state.groups.find(g=>g.ticketId===state.currentTicket.id && g.size==='solo');
-  if(!group){
-    group={
-      id:'GRP'+Date.now().toString().slice(-8),
-      ticketId:state.currentTicket.id,
-      eventId:state.currentTicket.event.id,
-      eventName:state.currentTicket.event.name,
-      size:'solo',
-      totalMembers:Math.floor(Math.random()*4000)+1000,
-      members:[{name:state.currentUser.name,gender:'-',phone:state.currentUser.phone||'081234567890',desc:'Penonton solo'}],
-      messages:[
-        {type:'system',text:`🎉 Selamat datang di grup diskusi "${state.currentTicket.event.name}"! Total ${Math.floor(Math.random()*4000)+1000} penonton bergabung.`,time:new Date().toISOString()},
-        {type:'user',sender:'Budi S.',text:'Halo semua! Siapa dari Jakarta?',time:new Date().toISOString()},
-        {type:'user',sender:'Siti R.',text:'Excited banget nih! 🎵',time:new Date().toISOString()}
-      ],
-      status:'active',
-      createdAt:new Date().toISOString(),
-      concertStarted:false,
-      closedAt:null,
-      ratings:[]
+  if (!state.currentTicket || !state.currentTicket.id) {
+    showToast("⚠️ Data tiket hilang. Silakan pilih dari halaman 'Tiket Saya'.", "warn");
+    showPage('tickets');
+    return;
+  }
+
+  // Cek apakah sudah ada grup untuk tiket ini (gunakan ==)
+  let group = state.groups.find(g => g.ticketId == state.currentTicket.id && g.size === 'solo');
+
+  if (!group) {
+    // Buat baru HANYA jika belum ada
+    group = {
+      id: 'GRP' + Date.now().toString().slice(-8),
+      ticketId: state.currentTicket.id,
+      eventId: state.currentTicket.event.id,
+      eventName: state.currentTicket.event.name,
+      size: 'solo',
+      totalMembers: Math.floor(Math.random() * 4000) + 1000,
+      members: [{name: state.currentUser.name, gender: '-', phone: state.currentUser.phone || '081234567890', desc: 'Penonton solo'}],
+      messages: [{type: 'system', text: `🎉 Selamat datang di grup diskusi "${state.currentTicket.event.name}"!`, time: new Date().toISOString()}],
+      status: 'active',
+      createdAt: new Date().toISOString(),
+      concertStarted: false,
+      closedAt: null,
+      ratings: []
     };
     state.groups.unshift(group);
-    saveUserData()('kk_groups',JSON.stringify(state.groups));
+    saveUserData();
+    console.log("Grup baru dibuat:", group.id);
+  } else {
+    console.log("Menggunakan grup yang sudah ada:", group.id);
   }
-  state.currentGroup=group;
+
+  state.currentGroup = group;
   showSoloChat();
 }
 
 function showSoloChat(){
-  const group=state.currentGroup;
-  document.getElementById('soloChatTitle').textContent=` ${group.eventName} - Grup Besar`;
-  document.getElementById('soloChatInfo').textContent=`${group.totalMembers.toLocaleString()} anggota • ${group.status==='active'?'🟢 Aktif':group.status==='concert'?'🎵 Konser Berlangsung':' Ditutup'}`;
-  
+  const group = state.currentGroup;
+  document.getElementById('soloChatTitle').textContent = `${group.eventName} - Grup Besar`;
+  document.getElementById('soloChatInfo').textContent = `${group.totalMembers.toLocaleString()} anggota • 🟢 Aktif`;
   renderSoloMessages();
-  
-  const inputArea=document.getElementById('soloChatInput');
-  if(group.status!=='active'){
-    inputArea.style.display='none';
-  } else {
-    inputArea.style.display='flex';
-  }
-  
-  const ratingSection=document.getElementById('soloRatingSection');
-  if(group.status==='closed' && !hasUserRated(group)){
-    ratingSection.style.display='block';
-    ratingSection.innerHTML=`
-      <div class="card" style="text-align:center">
-        <h3>⭐ Konser Selesai! Beri Rating Anda</h3>
-        <p style="color:#94a3b8;margin:10px 0">Bagaimana pengalaman menonton konser ini?</p>
-        <div class="rating-stars" style="justify-content:center;margin:15px 0">
-          <span onclick="setSoloRating(1)">★</span>
-          <span onclick="setSoloRating(2)">★</span>
-          <span onclick="setSoloRating(3)">★</span>
-          <span onclick="setSoloRating(4)">★</span>
-          <span onclick="setSoloRating(5)">★</span>
-        </div>
-        <div class="form-group" style="text-align:left">
-          <label>Komentar</label>
-          <textarea id="soloRatingComment" rows="3" placeholder="Ceritakan pengalaman Anda..."></textarea>
-        </div>
-        <button class="btn full success" onclick="submitSoloRating()">Kirim Rating</button>
-      </div>`;
-  } else if(group.status==='closed' && hasUserRated(group)){
-    ratingSection.style.display='block';
-    ratingSection.innerHTML='<div class="card" style="text-align:center"><h3>✅ Terima kasih! Rating Anda sudah tercatat.</h3></div>';
-  } else {
-    ratingSection.style.display='none';
-  }
-  
   showPage('solo-chat');
 }
 
 function renderSoloMessages(){
-  const group=state.currentGroup;
-  const container=document.getElementById('soloChatMessages');
-  container.innerHTML=group.messages.slice(-100).map(m=>{
-    if(m.type==='system'){
-      return `<div class="chat-msg system"><div class="content">${m.text}</div></div>`;
-    }
-    if(m.type==='warning'){
-      const warningClass=m.warningType==='disaster'?'warning-disaster':m.warningType==='riot'?'warning-riot':'warning-medical';
-      const icon=m.warningType==='disaster'?'🌊':m.warningType==='riot'?'⚠️':'🏥';
-      return `<div class="chat-msg admin ${warningClass}">
-        <div class="av">${icon}</div>
-        <div>
-          <div class="name">📢 PERINGATAN ADMIN • ${formatTime(m.time)}</div>
-          <div class="content"><strong>${m.title}</strong><br>${m.text}</div>
-        </div>
-      </div>`;
-    }
-    const isMe=m.sender===state.currentUser.name;
-    return `<div class="chat-msg" style="${isMe?'flex-direction:row-reverse':''}">
+  const group = state.currentGroup;
+  const container = document.getElementById('soloChatMessages');
+  container.innerHTML = group.messages.slice(-100).map(m => {
+    if(m.type === 'system') return `<div class="chat-msg system"><div class="content">${m.text}</div></div>`;
+    const isMe = m.sender === state.currentUser.name;
+    return `<div class="chat-msg" style="${isMe ? 'flex-direction:row-reverse' : ''}">
       <div class="av">${m.sender.charAt(0)}</div>
-      <div style="${isMe?'text-align:right':''}">
-        <div class="name" style="${isMe?'text-align:right':''}">${m.sender} • ${formatTime(m.time)}</div>
+      <div style="${isMe ? 'text-align:right' : ''}">
+        <div class="name">${m.sender} • ${formatTime(m.time)}</div>
         <div class="content">${m.text}</div>
       </div>
     </div>`;
   }).join('');
-  container.scrollTop=container.scrollHeight;
+  container.scrollTop = container.scrollHeight;
 }
 
 function sendSoloChat(){
-  const text=document.getElementById('soloChatText').value.trim();
-  if(!text)return;
-  if(state.currentGroup.status!=='active'){showToast('⚠️ Grup sedang ditutup','warn');return}
-  
-  state.currentGroup.messages.push({type:'user',sender:state.currentUser.name,text,time:new Date().toISOString()});
-  saveUserData()('kk_groups',JSON.stringify(state.groups));
-  document.getElementById('soloChatText').value='';
+  const text = document.getElementById('soloChatText').value.trim();
+  if(!text) return;
+  state.currentGroup.messages.push({type: 'user', sender: state.currentUser.name, text, time: new Date().toISOString()});
+  saveUserData();
+  document.getElementById('soloChatText').value = '';
   renderSoloMessages();
 }
 
-function hasUserRated(group){
-  return group.ratings && group.ratings.some(r=>r.user===state.currentUser.name);
-}
-
-let soloRatingValue=0;
-function setSoloRating(val){
-  soloRatingValue=val;
-  const stars=document.querySelectorAll('#soloRatingSection .rating-stars span');
-  stars.forEach((s,i)=>{if(i<val)s.classList.add('active');else s.classList.remove('active')});
-}
-
-function submitSoloRating(){
-  if(soloRatingValue===0){showToast('⚠️ Pilih rating terlebih dahulu','warn');return}
-  const comment=document.getElementById('soloRatingComment').value.trim();
-  
-  state.currentGroup.ratings.push({user:state.currentUser.name,rating:soloRatingValue,comment,time:new Date().toISOString()});
-  state.currentGroup.messages.push({type:'system',text:`⭐ ${state.currentUser.name} memberikan rating ${soloRatingValue} bintang`,time:new Date().toISOString()});
-  saveUserData()('kk_groups',JSON.stringify(state.groups));
-  
-  state.ratings.push({eventId:state.currentGroup.eventId,userId:state.currentUser.email,rating:soloRatingValue,comment});
-  saveUserData()('kk_ratings',JSON.stringify(state.ratings));
-  
-  showToast('⭐ Terima kasih atas rating Anda!','success');
-  showSoloChat();
-}
-
 // ==========================================
-// MY TICKETS
+// MY TICKETS & GROUPS
 // ==========================================
 function renderMyTickets(){
-  const box=document.getElementById('myTicketsList');
-  if(state.tickets.length===0){
-    box.innerHTML='<div class="card" style="text-align:center;color:#94a3b8">Belum ada tiket. Yuk pesan konser pertama Anda!</div>';
+  const box = document.getElementById('myTicketsList');
+  if(!box) return;
+  
+  // Pastikan data adalah array
+  const safeTickets = Array.isArray(state.tickets) ? state.tickets : [];
+  const safeGroups = Array.isArray(state.groups) ? state.groups : [];
+
+  if(safeTickets.length === 0){
+    box.innerHTML = '<div class="card" style="text-align:center;color:#94a3b8">Belum ada tiket. Yuk pesan konser pertama Anda!</div>';
     return;
   }
-  box.innerHTML=state.tickets.map(t=>{
-    const e=t.event;
-    const group=state.groups.find(g=>g.ticketId===t.id);
+
+  box.innerHTML = safeTickets.map(t => {
+    const e = t.event || {};
+    // Gunakan == (loose equality) agar cocok walau tipe datanya beda (string vs number)
+    const group = safeGroups.find(g => g.ticketId == t.id);
+
     return `<div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
-      <img src="${e.img}" style="width:100px;height:100px;border-radius:10px;object-fit:cover" />
+      <img src="${e.img || 'https://via.placeholder.com/100'}" style="width:100px;height:100px;border-radius:10px;object-fit:cover" />
       <div style="flex:1;min-width:200px">
-        <h3>${e.name}</h3>
-        <div style="color:#94a3b8;font-size:13px">${formatDate(e.date)} • ${e.venue}</div>
-        <div style="margin-top:8px">${t.seats.map(s=>`<span class="badge info">${s}</span>`).join(' ')}</div>
-        ${group?`<div style="margin-top:8px"><span class="badge ${group.status==='active'?'success':group.status==='concert'?'warn':'danger'}">${group.status==='active'?'🟢 Grup Aktif':group.status==='concert'?'🎵 Konser Berlangsung':'🔴 Grup Ditutup'}</span></div>`:''}
+        <h3>${e.name || 'Konser'}</h3>
+        <div style="color:#94a3b8;font-size:13px">${formatDate(e.date || new Date())} • ${e.venue || '-'}</div>
+        <div style="margin-top:8px">${(Array.isArray(t.seats) ? t.seats : []).map(s => `<span class="badge info">${s}</span>`).join(' ')}</div>
       </div>
       <div style="text-align:right;display:flex;flex-direction:column;gap:8px">
         <span class="badge success">AKTIF</span>
-        ${group?`<button class="btn" onclick="openGroup('${group.id}')">💬 Buka Grup</button>`:`<button class="btn" onclick="openTicketMode('${t.id}')">Pilih Mode</button>`}
-        <button class="btn ghost" onclick="viewTicket('${t.id}')"> Lihat Tiket</button>
+        ${group 
+          ? `<button class="btn" onclick="openGroup('${group.id}')">💬 Buka Grup</button>` 
+          : `<button class="btn" onclick="openTicketMode('${t.id}')">Pilih Mode</button>`
+        }
+        <button class="btn ghost" onclick="viewTicket('${t.id}')">Lihat Tiket</button>
       </div>
     </div>`;
   }).join('');
 }
 
 function openTicketMode(ticketId){
-  const ticket=state.tickets.find(t=>t.id===ticketId);
-  if(!ticket)return;
-  state.currentTicket=ticket;
+  const ticket = state.tickets.find(t => t.id === ticketId);
+  if(!ticket) return;
+  state.currentTicket = ticket;
   showPage('mode');
 }
 
 function viewTicket(id){
-  const t=state.tickets.find(x=>x.id===id);
-  if(!t)return;
-  state.currentTicket=t;
-  const container=document.createElement('div');
-  container.className='page active';
-  container.id='page-ticket-view';
-  container.innerHTML=`
+  const t = state.tickets.find(x => x.id === id);
+  if(!t) return;
+  state.currentTicket = t;
+  const container = document.createElement('div');
+  container.className = 'page active';
+  container.id = 'page-ticket-view';
+  container.innerHTML = `
     <button class="btn ghost" onclick="showPage('tickets');this.parentElement.remove()" style="margin-bottom:20px">← Kembali</button>
     <div style="text-align:center">
-      <h2 class="section-title"> Tiket Digital</h2>
+      <h2 class="section-title">Tiket Digital</h2>
       <div class="ticket">
         <div class="ticket-header">
           <div><div class="ticket-title">${t.event.name}</div><div style="color:#94a3b8;font-size:13px;margin-top:4px">🎤 ${t.event.artist}</div></div>
@@ -1946,28 +1355,23 @@ function viewTicket(id){
         <div class="qr-wrap" id="ticketQrView"></div>
         <div class="ticket-id">${t.id}</div>
       </div>
-      <button class="btn success full" style="max-width:300px;margin:20px auto" onclick="downloadTicketPDF('${t.id}')"> Download Tiket PDF</button>
+      <button class="btn success full" style="max-width:300px;margin:20px auto" onclick="downloadTicketPDF('${t.id}')">Download Tiket PDF</button>
     </div>`;
   document.body.appendChild(container);
-  setTimeout(()=>{
-    const qr=document.getElementById('ticketQrView');
-    if(qr)new QRCode(qr,{text:t.id,width:180,height:180});
-  },100);
+  setTimeout(() => {
+    const qr = document.getElementById('ticketQrView');
+    if(qr) new QRCode(qr, {text: t.id, width: 180, height: 180});
+  }, 100);
 }
 
 function downloadTicketPDF(ticketId){
-  const t=state.tickets.find(x=>x.id===ticketId);
-  if(!t)return;
-  
+  const t = state.tickets.find(x => x.id === ticketId);
+  if(!t) return;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  
-  doc.setFontSize(20);
-  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(20); doc.setTextColor(139, 92, 246);
   doc.text('KONSERKU - TIKET DIGITAL', 105, 20, { align: 'center' });
-  
-  doc.setFontSize(12);
-  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(12); doc.setTextColor(0, 0, 0);
   doc.text(`Event: ${t.event.name}`, 20, 40);
   doc.text(`Artis: ${t.event.artist}`, 20, 50);
   doc.text(`Tanggal: ${formatDate(t.event.date)} - ${t.event.time}`, 20, 60);
@@ -1977,116 +1381,136 @@ function downloadTicketPDF(ticketId){
   doc.text(`Kursi: ${t.seats.join(', ')}`, 20, 100);
   doc.text(`Total: Rp ${t.total.toLocaleString('id-ID')}`, 20, 110);
   doc.text(`ID Tiket: ${t.id}`, 20, 120);
-  doc.text(`ID Transaksi: ${t.txId}`, 20, 130);
-  
-  doc.setFontSize(10);
-  doc.setTextColor(100, 100, 100);
-  doc.text('Bukti Pembayaran: LUNAS (QRIS)', 20, 150);
-  doc.text('Status: ✅ Terkonfirmasi', 20, 160);
-  
   doc.save(`Tiket_${t.event.name.replace(/\s+/g,'_')}_${t.id}.pdf`);
-  showToast('📥 Tiket PDF berhasil didownload!','success');
+  showToast('📥 Tiket PDF berhasil didownload!', 'success');
 }
 
-// ==========================================
-// GROUPS PAGE
-// ==========================================
 function renderMyGroups(){
-  const box=document.getElementById('myGroupsList');
-  const myGroups=state.groups.filter(g=>state.tickets.some(t=>t.id===g.ticketId));
-  if(myGroups.length===0){
-    box.innerHTML='<div class="card" style="text-align:center;color:#94a3b8">Belum ada grup. Beli tiket dan pilih mode menonton untuk bergabung!</div>';
+  const box = document.getElementById('myGroupsList');
+  if(!box) return;
+  
+  const safeTickets = Array.isArray(state.tickets) ? state.tickets : [];
+  const safeGroups = Array.isArray(state.groups) ? state.groups : [];
+
+  // Filter grup yang punya tiket, dan hapus duplikat berdasarkan ticketId
+  const uniqueGroups = [];
+  const seenTicketIds = new Set();
+
+  for (const g of safeGroups) {
+    const hasTicket = safeTickets.some(t => t.id == g.ticketId);
+    if (hasTicket && !seenTicketIds.has(String(g.ticketId))) {
+      uniqueGroups.push(g);
+      seenTicketIds.add(String(g.ticketId));
+    }
+  }
+
+  if(uniqueGroups.length === 0){
+    box.innerHTML = '<div class="card" style="text-align:center;color:#94a3b8">Belum ada grup. Beli tiket dan pilih mode menonton!</div>';
     return;
   }
-  box.innerHTML=myGroups.map(g=>`
-    <div class="card">
+
+  box.innerHTML = uniqueGroups.map(g => {
+    const sizeText = g.size === 'solo' ? (g.totalMembers || 0).toLocaleString() + ' anggota' : 'Grup ' + g.size + ' orang';
+    const statusBadge = g.status === 'active' ? 'success' : 'danger';
+    const statusText = g.status === 'active' ? '🟢 Aktif' : '🔴 Ditutup';
+    return `<div class="card">
       <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:10px">
         <div>
-          <h3>${g.eventName}</h3>
-          <div style="color:#94a3b8;font-size:13px">${g.size==='solo'?g.totalMembers.toLocaleString()+' anggota':'Grup '+g.size+' orang'} • ${g.members.length} partner</div>
+          <h3>${g.eventName || 'Konser'}</h3>
+          <div style="color:#94a3b8;font-size:13px">${sizeText}</div>
         </div>
-        <span class="badge ${g.status==='active'?'success':g.status==='concert'?'warn':'danger'}">${g.status==='active'?'🟢 Aktif':g.status==='concert'?'🎵 Konser':'🔴 Ditutup'}</span>
+        <span class="badge ${statusBadge}">${statusText}</span>
       </div>
-      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <div style="margin-top:12px">
         <button class="btn" onclick="openGroup('${g.id}')">💬 Buka Chat</button>
-        <button class="btn ghost" onclick="showGroupInfo('${g.id}')">ℹ️ Info Grup</button>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function openGroup(groupId){
-  const group=state.groups.find(g=>g.id===groupId);
-  if(!group)return;
-  state.currentGroup=group;
-  if(group.size==='solo'){
+  console.log("Mencoba membuka grup ID:", groupId);
+  
+  const group = state.groups.find(g => g.id == groupId);
+  
+  if (!group) {
+    showToast("⚠️ Grup tidak ditemukan di sistem!", "warn");
+    console.error("Gagal menemukan grup dengan ID:", groupId);
+    return;
+  }
+
+  // Sinkronisasi: Pastikan currentTicket juga terisi agar chat tidak error
+  const ticket = state.tickets.find(t => t.id == group.ticketId);
+  if (ticket) {
+    state.currentTicket = ticket;
+  } else {
+    console.warn("Tiket untuk grup ini tidak ditemukan di state.tickets");
+  }
+
+  state.currentGroup = group;
+
+  if (group.size === 'solo') {
     showSoloChat();
   } else {
     showPartnerChat();
   }
 }
 
-function showGroupInfo(groupId){
-  const group=state.groups.find(g=>g.id===groupId);
-  if(!group)return;
-  alert(`Info Grup:\n\nEvent: ${group.eventName}\nTipe: ${group.size==='solo'?'Grup Besar (Solo)':'Partner '+group.size+' orang'}\nAnggota: ${group.size==='solo'?group.totalMembers:group.members.length}\nStatus: ${group.status}\nDibuat: ${formatDate(group.createdAt)}`);
-}
-
 // ==========================================
-// ADMIN
+// ADMIN DASHBOARD
 // ==========================================
-function showAdminTab(tab){
-  document.querySelectorAll('[id^="adminTab-"]').forEach(t=>t.style.display='none');
-  document.getElementById('adminTab-'+tab).style.display='block';
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  event.target.classList.add('active');
-  if(tab==='transactions')renderTransactions();
-  if(tab==='events')renderAdminEvents();
-  if(tab==='groups')renderAdminGroups();
-  if(tab==='warnings')renderWarningGroups();
-  if(tab==='stats')renderStats();
+function showAdminTab(tab, el){
+  document.querySelectorAll('[id^="adminTab-"]').forEach(t => t.style.display = 'none');
+  document.getElementById('adminTab-' + tab).style.display = 'block';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  
+  if(tab === 'transactions') renderTransactions();
+  if(tab === 'events') renderAdminEvents();
+  if(tab === 'tickets') renderAdminTickets();
+  if(tab === 'groups') renderAdminGroups();
+  if(tab === 'stats') renderStats();
 }
 
 function renderStats(){
   const allTx = getAllUsersData('kk_transactions');
   const allGroups = getAllUsersData('kk_groups');
+  const totalTickets = allTx.filter(t => t.status === 'success').reduce((sum, t) => sum + (t.seats ? t.seats.length : 1), 0);
+  const revenue = allTx.filter(t => t.status === 'success').reduce((a,b) => a + b.amount, 0);
+  const success = allTx.filter(t => t.status === 'success').length;
+  const groups = allGroups.filter(g => g.status === 'active' || g.status === 'concert').length;
   
-  const totalTickets = allTx.filter(t=>t.status==='success').reduce((sum, t) => sum + (t.seats ? t.seats.length : 1), 0);
-  const revenue = allTx.filter(t=>t.status==='success').reduce((a,b)=>a+b.amount,0);
-  const success = allTx.filter(t=>t.status==='success').length;
-  const groups = allGroups.filter(g=>g.status==='active'||g.status==='concert').length;
-  
-  document.getElementById('statTickets').textContent=totalTickets;
-  document.getElementById('statRevenue').textContent='Rp '+revenue.toLocaleString('id-ID');
-  document.getElementById('statSuccess').textContent=success;
-  document.getElementById('statGroups').textContent=groups;
+  document.getElementById('statTickets').textContent = totalTickets;
+  document.getElementById('statRevenue').textContent = 'Rp ' + revenue.toLocaleString('id-ID');
+  document.getElementById('statSuccess').textContent = success;
+  document.getElementById('statGroups').textContent = groups;
 }
 
 function renderTransactions(){
-  const tbody=document.getElementById('transactionTable');
+  const tbody = document.getElementById('transactionTable');
   const allTx = getAllUsersData('kk_transactions');
-  if(allTx.length===0){
-    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#94a3b8">Belum ada transaksi</td></tr>';
+  if(allTx.length === 0){
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#94a3b8">Belum ada transaksi</td></tr>';
     return;
   }
-  tbody.innerHTML=allTx.map(t=>`
+  tbody.innerHTML = allTx.map(t => `
     <tr>
       <td><code>${t.id}</code></td>
       <td>${t.buyer}<br><small style="color:#94a3b8">${t.email}</small></td>
       <td>${t.event.name}</td>
       <td>Rp ${t.amount.toLocaleString('id-ID')}</td>
-      <td><span class="status-badge ${t.status}">${t.status==='pending'?' Menunggu':t.status==='success'?'✅ Berhasil':t.status==='cancelled'?' Dibatalkan':'❌ Gagal'}</span></td>
-      <td><small>${formatTime(t.createdAt)}</small></td>
+      <td><span class="status-badge ${t.status}">${t.status === 'pending' ? 'Menunggu' : t.status === 'success' ? '✅ Berhasil' : '❌ Gagal'}</span></td>
     </tr>
   `).join('');
 }
 
 function renderAdminEvents(){
-  const tbody=document.getElementById('adminEventTable');
-  tbody.innerHTML=EVENTS.map(e=>{
-    const sold=state.transactions.filter(t=>t.event.id===e.id&&t.status==='success').length;
-    const statusClass=e.status==='active'?'success':'cancelled';
-    const statusText=e.status==='active'?'Aktif':'Dibatalkan';
+  const tbody = document.getElementById('adminEventTable');
+  const allTx = getAllUsersData('kk_transactions');
+  tbody.innerHTML = EVENTS.map(e => {
+    const sold = allTx.filter(t => t.event && t.event.id === e.id && t.status === 'success').length;
+    const statusClass = e.status === 'active' ? 'success' : 'cancelled';
+    const statusText = e.status === 'active' ? 'Aktif' : 'Dibatalkan';
     return `<tr>
       <td><strong>${e.name}</strong><br><small style="color:#94a3b8">${e.city}</small></td>
       <td>${formatDate(e.date)}</td>
@@ -2094,121 +1518,91 @@ function renderAdminEvents(){
       <td><span class="badge ${statusClass}">${statusText}</span></td>
       <td>
         <div class="event-actions">
-          ${e.status==='active'?`
-            <button class="btn warning" onclick="toggleEventStatus(${e.id},'cancelled')">🚫 Batalkan</button>
-            <button class="btn ghost" onclick="toggleEventStatus(${e.id},'closed')">🔒 Tutup</button>
-          `:`
-            <button class="btn success" onclick="toggleEventStatus(${e.id},'active')">✅ Aktifkan</button>
-          `}
+          ${e.status === 'active' ? `<button class="btn warning" onclick="toggleEventStatus(${e.id},'cancelled')">🚫 Batalkan</button>` : `<button class="btn success" onclick="toggleEventStatus(${e.id},'active')">✅ Aktifkan</button>`}
         </div>
       </td>
     </tr>`;
   }).join('');
 }
 
-function toggleEventStatus(eventId,newStatus){
-  const event=EVENTS.find(e=>e.id===eventId);
-  if(!event)return;
-  
-  const actionText=newStatus==='cancelled'?'MEMBATALKAN':newStatus==='closed'?'MENUTUP':'MENGAKTIFKAN';
-  const confirmed=confirm(`⚠️ Konfirmasi Admin\n\nAnda yakin ingin ${actionText} konser "${event.name}"?\n\nTindakan ini akan mempengaruhi semua tiket dan grup yang terkait.`);
-  
-  if(confirmed){
-    event.status=newStatus;
-    showToast(`✅ Konser "${event.name}" berhasil ${newStatus==='active'?'diaktifkan':newStatus==='cancelled'?'dibatalkan':'ditutup'}!`,'success');
-    renderAdminEvents();
-    renderHome();
-    renderEvents();
+function toggleEventStatus(eventId, newStatus){
+  const event = EVENTS.find(e => e.id === eventId);
+  if(!event) return;
+  if(confirm(`⚠️ Yakin ingin mengubah status konser "${event.name}"?`)){
+    event.status = newStatus;
+    showToast(`✅ Konser "${event.name}" berhasil diubah!`, 'success');
+    renderAdminEvents(); renderHome(); renderEvents();
   }
 }
 
-function renderAdminTickets() {
-    const tbody = document.getElementById('adminTicketTable');
-    const allTickets = getAllUsersData('kk_tickets');
-    if (allTickets.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:20px">Belum ada tiket</td></tr>';
-        return;
-    }
-    tbody.innerHTML = allTickets.map(t => `
-        <tr>
-            <td><code>${t.id}</code></td>
-            <td>${t.buyer}<br><small style="color:#94a3b8">${t.email}</small></td>
-            <td>${t.event.name}</td>
-            <td><span class="badge ${t.status === 'active' ? 'success' : t.status === 'cancelled' ? 'danger' : 'warn'}">${t.status.toUpperCase()}</span></td>
-            <td>
-                ${t.status === 'active' ? `<button class="btn danger" style="padding:4px 8px;font-size:11px" onclick="adminCancelTicket('${t.id}')">Batalkan Paksa</button>` : '-'}
-            </td>
-        </tr>
-    `).join('');
+function renderAdminTickets(){
+  const tbody = document.getElementById('adminTicketTable');
+  const allTickets = getAllUsersData('kk_tickets');
+  if(allTickets.length === 0){
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:20px">Belum ada tiket</td></tr>';
+    return;
+  }
+  tbody.innerHTML = allTickets.map(t => `
+    <tr>
+      <td><code>${t.id}</code></td>
+      <td>${t.buyer}<br><small style="color:#94a3b8">${t.email}</small></td>
+      <td>${t.event.name}</td>
+      <td><span class="badge ${t.status === 'active' ? 'success' : 'danger'}">${t.status.toUpperCase()}</span></td>
+      <td>
+        ${t.status === 'active' ? `<button class="btn danger" style="padding:4px 8px;font-size:11px" onclick="adminCancelTicket('${t.id}')">Batalkan Paksa</button>` : '-'}
+      </td>
+    </tr>
+  `).join('');
 }
 
-function renderAdminBankVerify() {
-    const tbody = document.getElementById('adminBankVerifyTable');
-    // Simulasi data untuk demo
-    tbody.innerHTML = `
-        <tr>
-            <td><code>TX99887766</code></td>
-            <td>Budi Santoso<br><small style="color:#94a3b8">budi@email.com</small></td>
-            <td>Rp 865.000</td>
-            <td><button class="btn ghost" style="padding:4px 8px;font-size:11px">📷 Lihat Bukti</button></td>
-            <td><span class="badge warn">Menunggu</span></td>
-            <td>
-                <button class="btn success" style="padding:4px 8px;font-size:11px" onclick="showToast('✅ Diverifikasi!', 'success')">Terima</button>
-                <button class="btn danger" style="padding:4px 8px;font-size:11px" onclick="showToast('❌ Ditolak!', 'error')">Tolak</button>
-            </td>
-        </tr>
-    `;
-}
-
-function adminCancelTicket(ticketId) {
-    if (!confirm('⚠️ Yakin ingin membatalkan tiket ini secara paksa? Tindakan ini tidak dapat dibatalkan.')) return;
-    const ticket = state.tickets.find(t => t.id === ticketId);
-    if (ticket) {
-        ticket.status = 'cancelled';
-        saveUserData()('kk_tickets', JSON.stringify(state.tickets));
-        
-        // Tutup grup terkait jika ada
-        const group = state.groups.find(g => g.ticketId === ticketId);
-        if (group) {
-            group.status = 'closed';
-            group.messages.push({type:'system', text:'🚫 Tiket ini dibatalkan oleh Admin. Grup ditutup.', time:new Date().toISOString()});
-            saveUserData()('kk_groups', JSON.stringify(state.groups));
+function adminCancelTicket(ticketId){
+  if(!confirm('⚠️ Yakin ingin membatalkan tiket ini secara paksa?')) return;
+  const allTickets = getAllUsersData('kk_tickets');
+  const ticket = allTickets.find(t => t.id === ticketId);
+  if(ticket){
+    ticket.status = 'cancelled';
+    // Simpan kembali ke user yang memiliki tiket ini
+    for(let i=0; i<localStorage.length; i++){
+      const key = localStorage.key(i);
+      if(key && key.startsWith('kk_tickets_')){
+        const userTickets = JSON.parse(localStorage.getItem(key) || '[]');
+        const idx = userTickets.findIndex(t => t.id === ticketId);
+        if(idx >= 0){
+          userTickets[idx].status = 'cancelled';
+          localStorage.setItem(key, JSON.stringify(userTickets));
+          break;
         }
-        
-        renderAdminTickets();
-        showToast('✅ Tiket berhasil dibatalkan oleh Admin.', 'success');
+      }
     }
+    showToast('✅ Tiket berhasil dibatalkan oleh Admin.', 'success');
+    renderAdminTickets();
+  }
 }
 
 function renderAdminGroups(){
   const allGroups = getAllUsersData('kk_groups');
-  document.getElementById('adminGroupTable').innerHTML=allGroups.map(g=>{
-    const memberCount=g.size==='solo'?g.totalMembers:g.members.length;
+  document.getElementById('adminGroupTable').innerHTML = allGroups.map(g => {
+    const memberCount = g.size === 'solo' ? g.totalMembers : g.members.length;
     return `<tr>
       <td><code>${g.id}</code></td>
       <td>${g.eventName}</td>
-      <td>${g.size==='solo'?'Solo':g.size+' orang'}</td>
+      <td>${g.size === 'solo' ? 'Solo' : g.size + ' orang'}</td>
       <td>${memberCount}</td>
-      <td><span class="badge ${g.status==='active'?'success':g.status==='concert'?'warn':'danger'}">${g.status==='active'?'Aktif':g.status==='concert'?'Konser':'Ditutup'}</span></td>
+      <td><span class="badge ${g.status === 'active' ? 'success' : 'danger'}">${g.status === 'active' ? 'Aktif' : 'Ditutup'}</span></td>
       <td>
         <div class="event-actions">
-          <button class="btn ghost" style="padding:4px 8px;font-size:11px" onclick="viewGroupMembers('${g.id}')">👥 Lihat Anggota</button>
-          ${g.status==='active'?`
-            <button class="btn warning" onclick="toggleGroupStatus('${g.id}','concert')"> Mulai Konser</button>
-            <button class="btn danger" onclick="toggleGroupStatus('${g.id}','closed')">🔒 Tutup Grup</button>
-          `:g.status==='concert'?`
-            <button class="btn success" onclick="toggleGroupStatus('${g.id}','closed')">✅ Selesai Konser</button>
-          `:''}
+          <button class="btn ghost" style="padding:4px 8px;font-size:11px" onclick="viewGroupMembers('${g.id}')">👥 Lihat</button>
+          ${g.status === 'active' ? `<button class="btn danger" style="padding:4px 8px;font-size:11px" onclick="toggleGroupStatus('${g.id}','closed')">🔒 Tutup</button>` : ''}
         </div>
       </td>
     </tr>`;
   }).join('');
 }
 
-// Fungsi untuk melihat anggota grup
-function viewGroupMembers(groupId) {
-  const group = state.groups.find(g => g.id === groupId);
-  if(!group) { showToast('⚠️ Grup tidak ditemukan', 'warn'); return; }
+function viewGroupMembers(groupId){
+  const allGroups = getAllUsersData('kk_groups');
+  const group = allGroups.find(g => g.id === groupId);
+  if(!group){ showToast('⚠️ Grup tidak ditemukan', 'warn'); return; }
   
   document.getElementById('groupMembersList').innerHTML = group.members.map(m => `
     <div class="partner-item" style="display:flex;align-items:center;gap:15px;text-align:left;margin-bottom:10px;padding:10px;background:#0f172a;border-radius:8px">
@@ -2216,118 +1610,63 @@ function viewGroupMembers(groupId) {
       <div style="flex:1">
         <div class="name" style="font-weight:bold;color:#fbbf24">${m.name}</div>
         <div style="color:#94a3b8;font-size:12px">📱 ${m.phone || '-'} | 🚻 ${m.gender || '-'}</div>
-        <div style="color:#94a3b8;font-size:12px">📝 ${m.desc || 'Tidak ada deskripsi'}</div>
       </div>
     </div>
   `).join('');
-  
   document.getElementById('groupMembersModal').classList.add('show');
 }
 
-// Fungsi untuk mengubah status grup
-function toggleGroupStatus(groupId, newStatus) {
-  const group = state.groups.find(g => g.id === groupId);
-  if(!group) return;
-  
-  const actionText = newStatus==='concert' ? 'MEMULAI KONSER (chat akan ditutup)' : newStatus==='closed' ? 'MENUTUP GRUP' : 'MEMBUKA GRUP';
-  const confirmed = confirm(`⚠️ Konfirmasi Admin\n\nAnda yakin ingin ${actionText} untuk grup "${group.eventName}"?`);
-  
-  if(confirmed) {
-    group.status = newStatus;
-    if(newStatus==='closed') {
-      group.closedAt = new Date().toISOString();
-      group.messages.push({type:'system', text:'🔒 Grup ditutup oleh admin. Terima kasih telah bergabung!', time:new Date().toISOString()});
-    } else if(newStatus==='concert') {
-      group.messages.push({type:'system', text:'🎵 Konser sedang berlangsung! Chat ditutup sementara untuk kenyamanan bersama.', time:new Date().toISOString()});
+function toggleGroupStatus(groupId, newStatus){
+  // Untuk menyederhanakan, kita update di semua storage yang memiliki grup ini
+  for(let i=0; i<localStorage.length; i++){
+    const key = localStorage.key(i);
+    if(key && key.startsWith('kk_groups_')){
+      const userGroups = JSON.parse(localStorage.getItem(key) || '[]');
+      const group = userGroups.find(g => g.id === groupId);
+      if(group){
+        group.status = newStatus;
+        if(newStatus === 'closed'){
+          group.closedAt = new Date().toISOString();
+          group.messages.push({type: 'system', text: '🔒 Grup ditutup oleh admin.', time: new Date().toISOString()});
+        }
+        localStorage.setItem(key, JSON.stringify(userGroups));
+      }
     }
-    saveUserData()('kk_groups', JSON.stringify(state.groups));
-    showToast(`✅ Grup "${group.eventName}" berhasil ${newStatus==='concert'?'dimulai':newStatus==='closed'?'ditutup':'dibuka'}!`, 'success');
-    renderAdminGroups();
   }
+  showToast('✅ Status grup berhasil diubah!', 'success');
+  renderAdminGroups();
 }
 
-function toggleGroupStatus(groupId,newStatus){
-  const group=state.groups.find(g=>g.id===groupId);
-  if(!group)return;
-  
-  const actionText=newStatus==='concert'?'MEMULAI KONSER (tutup chat)':newStatus==='closed'?'MENUTUP GRUP':'MEMBUKA GRUP';
-  const confirmed=confirm(`⚠️ Konfirmasi Admin\n\nAnda yakin ingin ${actionText} untuk grup "${group.eventName}"?\n\n${newStatus==='concert'?'Chat akan ditutup selama konser berlangsung.':newStatus==='closed'?'Grup akan ditutup permanen setelah 24 jam rating.':'Grup akan dibuka kembali.'}`);
-  
-  if(confirmed){
-    group.status=newStatus;
-    if(newStatus==='closed'){
-      group.closedAt=new Date().toISOString();
-      group.messages.push({type:'system',text:'🔒 Grup ditutup oleh admin. Terima kasih telah bergabung!',time:new Date().toISOString()});
-    } else if(newStatus==='concert'){
-      group.messages.push({type:'system',text:' Konser sedang berlangsung! Chat ditutup sementara untuk kenyamanan bersama.',time:new Date().toISOString()});
-    }
-    saveUserData()('kk_groups',JSON.stringify(state.groups));
-    showToast(`✅ Grup "${group.eventName}" berhasil ${newStatus==='concert'?'dimulai (chat ditutup)':newStatus==='closed'?'ditutup':'dibuka'}!`,'success');
-    renderAdminGroups();
-  }
-}
-
-function renderWarningGroups(){
-  const select=document.getElementById('warningGroupSelect');
-  const activeGroups=state.groups.filter(g=>g.status==='active'||g.status==='concert');
-  if(activeGroups.length===0){
-    select.innerHTML='<option value="">Tidak ada grup aktif</option>';
-    return;
-  }
-  select.innerHTML=activeGroups.map(g=>`<option value="${g.id}">${g.eventName} (${g.size==='solo'?'Solo':g.size+' orang'})</option>`).join('');
-}
-
-function sendWarning(){
-  const groupId=document.getElementById('warningGroupSelect').value;
-  const type=document.getElementById('warningType').value;
-  const desc=document.getElementById('warningDesc').value.trim();
-  
-  if(!groupId){showToast('⚠️ Pilih grup terlebih dahulu','warn');return}
-  if(!desc){showToast('⚠️ Deskripsi peringatan wajib diisi','warn');return}
-  
-  const group=state.groups.find(g=>g.id===groupId);
-  if(!group)return;
-  
-  const titles={disaster:'🌊 PERINGATAN BENCANA',riot:'⚠️ PERINGATAN KERUSUHAN',medical:'🏥 PERINGATAN MEDIS'};
-  const instructions={
-    disaster:'\n\n📋 INSTRUKSI KESELAMATAN:\n1. Tetap tenang dan jangan panik\n2. Ikuti arahan petugas keamanan\n3. Menuju titik kumpul terdekat\n4. Bawa barang penting saja\n5. Hubungi darurat: 112',
-    riot:'\n\n📋 INSTRUKSI KESELAMATAN:\n1. Jauhi area kerusuhan\n2. Jangan rekam atau provokasi\n3. Ikuti jalur evakuasi yang ditandai\n4. Hubungi keamanan venue\n5. Tetap bersama grup Anda',
-    medical:'\n\n📋 INSTRUKSI KESELAMATAN:\n1. Jika butuh bantuan medis, angkat tangan\n2. Petugas medis akan menuju lokasi\n3. Jangan pindahkan korban sendiri\n4. Beri ruang untuk tim medis\n5. Hubungi darurat: 118'
-  };
-  
-  group.messages.push({
-    type:'warning',
-    warningType:type,
-    title:titles[type],
-    text:desc+instructions[type],
-    time:new Date().toISOString()
-  });
-  
-  saveUserData()('kk_groups',JSON.stringify(state.groups));
-  document.getElementById('warningDesc').value='';
-  showToast(`📢 Peringatan terkirim ke grup ${group.eventName}!`,'success');
-}
-
-function renderAdmin(){
-  renderStats();
-}
+function renderAdmin(){ renderStats(); }
 
 // ==========================================
-// UTILS
+// PROFILE
 // ==========================================
-function formatDate(d){
-  const dt=new Date(d);
-  return dt.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+function openProfileModal(){
+  document.getElementById('profileName').value = state.currentUser.name;
+  document.getElementById('profileEmail').value = state.currentUser.email;
+  document.getElementById('profilePhone').value = state.currentUser.phone || '081234567890';
+  document.getElementById('profileModal').classList.add('show');
 }
-function formatTime(d){
-  const dt=new Date(d);
-  return dt.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-}
-function showToast(msg,type='success'){
-  const t=document.getElementById('toast');
-  document.getElementById('toastMsg').textContent=msg;
-  t.className='toast show '+type;
-  setTimeout(()=>t.classList.remove('show'),3500);
+
+function saveProfile(){
+  const name = document.getElementById('profileName').value.trim();
+  const email = document.getElementById('profileEmail').value.trim();
+  const phone = document.getElementById('profilePhone').value.trim();
+  if(!name || !email){ showToast('⚠️ Nama dan email wajib diisi!', 'warn'); return; }
+  
+  state.currentUser.name = name;
+  state.currentUser.email = email;
+  state.currentUser.phone = phone;
+  localStorage.setItem('kk_currentUser', JSON.stringify(state.currentUser));
+  
+  document.getElementById('userName').textContent = name;
+  document.getElementById('buyerName').value = name;
+  document.getElementById('buyerEmail').value = email;
+  document.getElementById('buyerPhone').value = phone;
+  
+  closeModal('profileModal');
+  showToast('✅ Profil berhasil diperbarui!', 'success');
 }
 
 // ==========================================
@@ -2335,15 +1674,5 @@ function showToast(msg,type='success'){
 // ==========================================
 checkLoginStatus();
 </script>
-<!-- MODAL LIHAT ANGGOTA GRUP -->
-<div class="modal" id="groupMembersModal">
-  <div class="modal-box">
-    <h2>👥 Anggota Grup</h2>
-    <div id="groupMembersList" style="max-height: 400px; overflow-y: auto; margin-top: 15px;"></div>
-    <div style="display:flex;justify-content:flex-end;margin-top:20px">
-      <button class="btn ghost" onclick="closeModal('groupMembersModal')">Tutup</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
